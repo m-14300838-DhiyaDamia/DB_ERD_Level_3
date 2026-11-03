@@ -1,0 +1,822 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>ERD Detective Level 3</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Exo+2:wght@400;500;600;700&family=Share+Tech+Mono&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e9eff7;--sf:#fff;--ink:#14213a;--mu:#5b6b85;--ln:#d0daea;--E:#2f6fdd;--A:#23895c;--K:#b98200;--R:#d03a81;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0e1626;--sf:#17233a;--ink:#e8eefb;--mu:#9fb0cc;--ln:#2a3a58;--E:#6b9bff;--A:#4cc38a;--K:#e8b230;--R:#f07bad}}
+:root[data-theme=dark]{--bg:#0e1626;--sf:#17233a;--ink:#e8eefb;--mu:#9fb0cc;--ln:#2a3a58;--E:#6b9bff;--A:#4cc38a;--K:#e8b230;--R:#f07bad}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.6 Lexend,system-ui,Segoe UI,sans-serif}
+.app{display:grid;grid-template-columns:232px 1fr;min-height:100vh}
+nav{background:var(--sf);border-right:1px solid var(--ln);padding:18px 12px;position:sticky;top:0;height:100vh;overflow:auto}
+nav h1{font-size:17px;margin:0 6px 2px;font-weight:800}nav small{display:block;margin:0 6px 14px;color:var(--mu);font-size:12px}
+nav button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:none;color:var(--ink);padding:9px 10px;border-radius:8px;font:inherit;cursor:pointer}
+nav button:hover{background:var(--bg)}nav button.on{background:var(--ink);color:var(--sf)}
+nav i{width:10px;height:10px;border-radius:3px;flex:none}
+main{padding:26px clamp(14px,3vw,36px);max-width:1040px;width:100%;min-width:0}.app>*{min-width:0}
+h2{font-size:24px;margin:0 0 6px;font-weight:800}h3{margin:0 0 6px}
+.lv{display:inline-block;background:var(--K);color:#fff;border-radius:6px;padding:0 8px;font-size:12px;font-weight:600;margin-left:4px;vertical-align:2px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:18px;margin:14px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.grid .card{margin:0;cursor:pointer;border-top:5px solid var(--c);text-align:left;font:inherit;color:inherit}
+.grid .card:hover{border-color:var(--c)}
+.mu{color:var(--mu)}.big{font-size:34px;font-weight:800;margin:4px 0}
+.b,.b2{font:600 14px Lexend,sans-serif;border:0;border-radius:8px;padding:9px 16px;cursor:pointer;background:var(--E);color:#fff;margin:4px 4px 4px 0}
+.b2{background:var(--bg);color:var(--ink);border:1px solid var(--ln)}.b2.on{background:var(--ink);color:var(--sf)}
+.b:focus-visible,.b2:focus-visible,nav button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--K);outline-offset:2px}
+.bar{height:10px;background:var(--ln);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--A);transition:width .3s}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--ln);flex-wrap:wrap}
+select,input[type=text]{font:inherit;padding:6px 8px;border-radius:7px;border:1px solid var(--ln);background:var(--sf);color:var(--ink);max-width:100%}
+.fb{border-left:6px solid}.good{border-color:var(--A)}.bad{border-color:var(--R)}
+.chip{display:inline-block;padding:3px 11px;border-radius:99px;font-size:13px;margin:3px 4px 3px 0;background:var(--bg);border:1px solid var(--ln)}.chip.on{background:var(--K);color:#fff;border-color:var(--K)}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:10px 14px;border-radius:9px;border:1.5px solid var(--ln);background:var(--sf);color:var(--ink);font:inherit;cursor:pointer}.opt:hover{border-color:var(--E)}
+.svgw{background:#fff;border:1px solid var(--ln);border-radius:10px;overflow:auto;margin:8px 0}.svgw svg{display:block;min-width:520px}.svgw.lg svg{min-width:760px}
+.tool{display:flex;flex-wrap:wrap;gap:4px}#cv{touch-action:none;min-width:900px}
+.tag{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+dialog{border:1px solid var(--ln);border-radius:12px;background:var(--sf);color:var(--ink);max-width:380px}
+.scn{background:var(--bg);border-left:5px solid var(--E);padding:10px 14px;border-radius:6px;font-style:italic;margin:8px 0}
+.tgs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}.tg{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid var(--ln);border-radius:99px;background:var(--sf);cursor:pointer;font-size:14px}.tg:has(input:checked){border-color:var(--E);background:var(--bg);font-weight:600}.tg input{accent-color:var(--E)}
+.hl{border-radius:4px;padding:0 3px;color:#14213a;font-style:normal}.he{background:#cfe0ff}.ha{background:#cdeedd}.hr{background:#fbd3e4}.hc{border-bottom:3px dotted var(--K)}
+.ex{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+#toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--sf);padding:10px 16px;border-radius:10px;max-width:90vw;z-index:9;display:none}
+label.f{display:block;margin:12px 0 3px;font-weight:600}input[type=text].w,select.w{width:100%;max-width:420px}
+table{border-collapse:collapse;width:100%}th,td{padding:7px 10px;border-bottom:1px solid var(--ln);text-align:left;vertical-align:top}th{color:var(--mu);font-size:13px}tr.me{background:var(--bg);font-weight:700}.lb th,.lb td{white-space:nowrap}
+@media(max-width:760px){.app{grid-template-columns:1fr}nav{position:static;height:auto;display:flex;overflow-x:auto;gap:4px;padding:10px;border:0;border-bottom:1px solid var(--ln)}nav h1,nav small{display:none}nav button{width:auto;white-space:nowrap}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ---- Level 3 blueprint theme ---- */
+:root{--bg:#f1f5fb;--sf:#fff;--ink:#0f1b33;--mu:#56647f;--ln:#d5deec;--gl:rgba(47,111,221,.07)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1830;--sf:#112242;--ink:#e7eefc;--mu:#9db0d0;--ln:#25395f;--gl:rgba(130,170,255,.07)}}
+:root[data-theme=dark]{--bg:#0b1830;--sf:#112242;--ink:#e7eefc;--mu:#9db0d0;--ln:#25395f;--gl:rgba(130,170,255,.07)}
+body{font-family:'IBM Plex Sans',Lexend,system-ui,sans-serif;background-color:var(--bg);background-image:linear-gradient(var(--gl) 1px,transparent 1px),linear-gradient(90deg,var(--gl) 1px,transparent 1px);background-size:28px 28px}
+h1,h2,h3,.b,.b2,.lv,.chip,.pill,.rank,.stamp,.big,.node,.thm,.verdict b,.who{font-family:Sora,'IBM Plex Sans',system-ui,sans-serif}
+h2{font-size:26px;font-weight:600;letter-spacing:-.01em}h3{font-size:17px;font-weight:600}
+.card{border-radius:10px;border:1px solid var(--ln);box-shadow:none}
+.b,.b2{font-size:14px;font-weight:600;border-radius:8px;padding:9px 16px;box-shadow:none;transition:filter .15s,border-color .15s}
+.b:hover{filter:brightness(1.1)}.b:active,.b2:active{transform:translateY(1px);box-shadow:none}
+.b2{background:var(--sf);border:1px solid var(--ln)}.b2:hover{border-color:var(--E)}.b2.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.svgw{border-radius:10px;border:1px solid var(--ln)}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:14px}.brand h1{margin:0;font-size:16px}.brand small{margin:0}
+#prof{display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px;border:1px solid var(--ln);border-radius:10px;font-size:13px;line-height:1.3}#prof:empty{display:none}
+.thm{margin-top:10px;width:100%;background:none;border:1px dashed var(--ln);border-radius:8px;color:var(--mu);padding:7px;font-size:12px;cursor:pointer}
+.brief{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:22px 24px;margin-bottom:14px;display:grid;gap:12px}
+.brief .who{display:flex;align-items:center;gap:16px;font-family:inherit}.brief h2{margin:0}.meta{color:var(--mu);font-size:14px}
+.xpbar{height:8px;background:var(--ln);border-radius:9px;overflow:hidden}.xpbar i{display:block;height:100%;background:linear-gradient(90deg,var(--E),var(--A));border-radius:9px;transition:width .4s}
+.xpl{font-size:13px;color:var(--mu);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.rank{display:inline-block;border:1px solid var(--ln);border-radius:99px;padding:0 10px;font-size:13px;margin-right:6px}
+.dx{display:flex;gap:10px;align-items:flex-end;margin:10px 0}.dx svg{flex:none}
+.bub{position:relative;background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:10px 14px;line-height:1.5;margin-bottom:10px;max-width:640px}
+.bub::before{content:"";position:absolute;left:-7px;bottom:16px;width:12px;height:12px;background:var(--sf);border-left:1px solid var(--ln);border-bottom:1px solid var(--ln);transform:rotate(45deg)}
+.dx.joy .bub{border-color:var(--A)}.dx.joy .bub::before{border-color:var(--A)}.dx.oops .bub,.dx.oops .bub::before{border-color:var(--R)}.dx.think .bub,.dx.think .bub::before{border-color:var(--K)}
+.bub .who{display:block;font-size:12px;font-weight:600;color:var(--mu)}
+.brief{display:flex;gap:18px;align-items:stretch;justify-content:space-between}.bl{display:grid;gap:14px;flex:1;min-width:0;align-content:start}.bdex{flex:none;align-self:flex-end;display:flex;align-items:flex-end;gap:8px;margin:0 0 -22px}.bdex .bub{max-width:210px;margin-bottom:84px;font-size:14px}.bdex svg{flex:none;margin-right:-4px}
+.brief{background:linear-gradient(115deg,var(--sf) 52%,rgba(47,111,221,.14));overflow:hidden}
+.ava-lg svg{filter:drop-shadow(0 6px 10px rgba(15,27,51,.18))}
+@media(max-width:760px){.bdex{display:none}.dx svg{width:56px;height:auto}}
+.verdict{display:flex;align-items:center;gap:10px;margin-bottom:6px}.verdict b{font-size:17px}.resulthead{display:flex;align-items:center;gap:16px}.resulthead h2{margin:0}
+.streak{color:var(--K);font-size:13px;border:1px solid var(--K);border-radius:99px;padding:0 10px}.pips{color:var(--K);letter-spacing:2px;margin-left:6px}
+.path{list-style:none;display:flex;margin:14px 0;padding:0;overflow-x:auto}.path li{flex:1;min-width:96px;position:relative;text-align:center}
+.path li::before{content:"";position:absolute;top:17px;left:-50%;width:100%;height:2px;background:var(--ln)}.path li:first-child::before{display:none}.path li.done::before,.path li.now::before{background:var(--A)}
+.path button{background:none;border:0;color:var(--ink);font:inherit;cursor:pointer;padding:0 4px;position:relative;width:100%}.path button:focus-visible{outline:3px solid var(--K);outline-offset:2px;border-radius:8px}
+.node{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;margin:0 auto 4px;background:var(--sf);border:2px solid var(--ln);font-weight:600;font-size:14px;position:relative;z-index:1}
+.done .node{background:var(--A);border-color:var(--A);color:#fff}.now .node{border-color:var(--E);color:var(--E);box-shadow:0 0 0 4px rgba(47,111,221,.18)}.nm{display:block;font-size:12px;color:var(--mu);line-height:1.3}
+.grid .card{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:2px;border-top:3px solid var(--c)}.grid .card h3{margin:0 0 4px}
+.ic{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:10px;margin-bottom:8px;color:#fff}
+.pill{display:inline-block;font-size:12px;padding:1px 11px;border-radius:99px;background:var(--bg);border:1px solid var(--ln);margin-top:8px}.pill.ok{background:var(--A);color:#fff;border-color:var(--A)}
+.rk{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;font-weight:600;font-size:13px;background:var(--bg);border:1px solid var(--ln)}.rk.r1{background:#e8b230;color:#3a2a00;border-color:#e8b230}.rk.r2{background:#c3ccdb;color:#1f2a40;border-color:#c3ccdb}.rk.r3{background:#d29566;color:#3a1f08;border-color:#d29566}
+.stamp{display:inline-block;font-size:15px;font-weight:600;color:var(--A);border:2px solid var(--A);border-radius:6px;padding:0 12px;transform:rotate(-3deg);animation:stamp .3s ease-out}
+@keyframes stamp{from{transform:scale(1.8) rotate(-3deg);opacity:0}to{transform:scale(1) rotate(-3deg);opacity:1}}
+.avs{border:0;padding:0;margin:14px 0;display:flex;flex-wrap:wrap;gap:10px}.avs legend{font-weight:600;margin-bottom:6px;padding:0}
+.avo{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 10px;border:1.5px solid var(--ln);border-radius:10px;background:var(--sf);cursor:pointer;font:inherit;color:var(--ink);font-size:12px;position:relative}
+.avo input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}.avo:hover{border-color:var(--E)}.avo:has(input:checked){border-color:var(--E);background:var(--bg);box-shadow:0 0 0 3px rgba(47,111,221,.2)}.avo:has(input:focus-visible){outline:3px solid var(--K)}
+dialog::backdrop{background:rgba(5,12,28,.55)}#avd{max-width:480px}
+#xp{position:fixed;top:16px;right:16px;background:var(--A);color:#fff;font:600 14px Sora,sans-serif;padding:8px 16px;border-radius:99px;display:none;z-index:30;animation:xpin .3s ease-out}
+@keyframes xpin{from{transform:translateY(-10px);opacity:0}to{transform:none;opacity:1}}
+@media(max-width:760px){.brand,#prof,.thm{display:none}.brief{padding:18px}.brief .who{gap:12px}}.avo svg{border-radius:50%}.svgw:not(.lg) svg{max-height:270px}.svgw svg#cv{max-height:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+/* ---- Cyberpunk Pagoh (light) theme ---- */
+/* ---- Cyberpunk Malaysia theme ---- */
+:root,:root:not([data-theme=light]),:root[data-theme=dark],:root[data-theme=light]{--bg:#f4f2fc;--sf:#fff;--ink:#1a1640;--mu:#5d5a8a;--ln:#d9d3f2;--E:#0089b5;--A:#0c9a5e;--K:#b97d00;--R:#d6179c;--V:#7a45ff;--O:#e8731a;--gl:rgba(100,80,210,.07);--g1:linear-gradient(100deg,#19cde8,#8a5cff 55%,#ff3bb5);--g2:linear-gradient(100deg,#35e08a,#19cde8);color-scheme:light}
+body{font-family:'Exo 2','IBM Plex Sans',system-ui,sans-serif;font-size:16px;color:var(--ink);background-color:#f6f4fd;background-image:radial-gradient(900px 500px at 8% -5%,rgba(138,92,255,.16),transparent 60%),radial-gradient(800px 520px at 100% 30%,rgba(255,59,181,.10),transparent 60%),radial-gradient(700px 400px at 40% 0%,rgba(25,205,232,.12),transparent 60%),linear-gradient(var(--gl) 1px,transparent 1px),linear-gradient(90deg,var(--gl) 1px,transparent 1px);background-size:auto,auto,30px 30px,30px 30px;background-attachment:fixed;position:relative;overflow-x:hidden}
+body::after{content:"";position:fixed;inset:0;z-index:70;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(90,70,200,.025) 0 1px,transparent 1px 3px)}
+h1,h2,h3,.b,.b2,.lv,.chip,.pill,.rank,.stamp,.big,.node,.verdict b,.who,.rk,.streak{font-family:Orbitron,Sora,'Exo 2',system-ui,sans-serif}
+.mono,.xpl,.meta,.bub .who,th,small,.nm,label.f,.avs legend{font-family:'Share Tech Mono',ui-monospace,monospace}
+h2{font-size:24px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);background:none;-webkit-background-clip:initial;animation:none;text-shadow:2px 0 rgba(255,59,181,.35),-2px 0 rgba(25,205,232,.45)}
+h3{font-size:16px;letter-spacing:.03em;font-weight:700;color:var(--ink)}
+.lv{background:var(--g1);color:#0d0a2e;font-weight:800;border-radius:3px;letter-spacing:.06em}
+.app{position:relative;z-index:1}
+nav{background:rgba(255,255,255,.8);backdrop-filter:blur(8px);border-right:1px solid var(--ln);box-shadow:6px 0 30px -14px rgba(138,92,255,.35)}
+nav h1{font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);text-shadow:1px 0 rgba(255,59,181,.4),-1px 0 rgba(25,205,232,.5)}
+nav button{border-radius:2px;border-left:3px solid transparent;font-size:15px;transition:transform .18s,background .18s,border-color .18s}nav button:hover{background:rgba(0,150,199,.08);transform:translateX(5px);border-left-color:var(--c,var(--E))}
+nav button i{border-radius:1px;transform:rotate(45deg)}nav button:hover i{transform:rotate(45deg) scale(1.5)}
+nav button.on{background:linear-gradient(90deg,rgba(25,205,232,.22),transparent);color:var(--ink);font-weight:700;border-left-color:var(--V);box-shadow:none}
+.card,.brief,dialog{--k:var(--E);background:linear-gradient(var(--k),var(--k)) top left/16px 2px no-repeat,linear-gradient(var(--k),var(--k)) top left/2px 16px no-repeat,linear-gradient(var(--R),var(--R)) bottom right/16px 2px no-repeat,linear-gradient(var(--R),var(--R)) bottom right/2px 16px no-repeat,rgba(255,255,255,.96);border:1px solid var(--ln);border-radius:3px;box-shadow:0 1px 0 rgba(255,255,255,.9),0 14px 30px -18px rgba(90,70,200,.4)}
+main>*{position:relative;animation:rise .5s cubic-bezier(.2,.8,.2,1) both}main>*:nth-child(2){animation-delay:.06s}main>*:nth-child(3){animation-delay:.12s}main>*:nth-child(4){animation-delay:.18s}main>*:nth-child(5){animation-delay:.24s}main>*:nth-child(n+6){animation-delay:.3s}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.grid .card{--k:var(--c);animation:rise .5s cubic-bezier(.2,.8,.2,1) both;transition:transform .25s,box-shadow .25s,border-color .25s;position:relative;overflow:hidden;border-top:1px solid var(--ln);border-color:color-mix(in srgb,var(--c) 40%,var(--ln))}
+.grid .card::before{content:"";position:absolute;left:0;right:0;top:-100%;height:60%;background:linear-gradient(transparent,color-mix(in srgb,var(--c) 22%,transparent),transparent);transition:top .7s}.grid .card:hover::before{top:130%}
+.grid .card::after{content:"";position:absolute;right:10px;top:8px;width:30px;height:30px;background:linear-gradient(135deg,transparent 50%,var(--c) 50%);opacity:.25}
+.grid .card:hover{transform:translateY(-6px);border-color:var(--c);box-shadow:0 0 0 1px var(--c),0 18px 34px -14px var(--c)}
+.grid .card:nth-child(2){animation-delay:.07s}.grid .card:nth-child(3){animation-delay:.14s}.grid .card:nth-child(4){animation-delay:.21s}.grid .card:nth-child(5){animation-delay:.28s}.grid .card:nth-child(6){animation-delay:.35s}
+.ic{border-radius:4px;color:#fff;box-shadow:0 8px 16px -6px var(--c);transition:transform .3s;background:var(--c)!important}.grid .card:hover .ic{transform:rotate(-8deg) scale(1.12)}
+.b{background:var(--g1);background-size:160% 100%;color:#0d0a2e;font-weight:800;letter-spacing:.05em;text-transform:uppercase;font-size:12.5px;border-radius:2px;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px);padding:11px 20px;box-shadow:none;transition:transform .15s,filter .2s,background-position .4s}
+.b:hover{filter:brightness(1.06) drop-shadow(0 4px 8px rgba(138,92,255,.5));background-position:100% 0;transform:translateY(-2px)}.b:active{transform:translateY(1px) scale(.98)}
+.b2{background:#fff;color:var(--E);border:1px solid var(--E);border-radius:2px;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;transition:transform .15s,box-shadow .2s,background .2s}.b2:hover{background:rgba(0,150,199,.18);box-shadow:0 0 14px rgba(0,150,199,.5);transform:translateY(-2px)}.b2.on{background:var(--E);color:#0d0a2e}
+.brief{background:linear-gradient(var(--E),var(--E)) top left/22px 3px no-repeat,linear-gradient(var(--E),var(--E)) top left/3px 22px no-repeat,linear-gradient(var(--R),var(--R)) bottom right/22px 3px no-repeat,linear-gradient(var(--R),var(--R)) bottom right/3px 22px no-repeat,linear-gradient(115deg,rgba(255,255,255,.96) 45%,rgba(138,92,255,.14) 78%,rgba(255,59,181,.18));border:1px solid color-mix(in srgb,var(--E) 50%,var(--ln));position:relative;box-shadow:0 18px 40px -22px rgba(138,92,255,.6)}
+.brief::before{content:none}
+.brief h2{font-size:22px}
+.ava-lg svg{animation:bob 3.4s ease-in-out infinite;filter:drop-shadow(0 8px 12px rgba(90,70,200,.35))}
+@keyframes bob{50%{transform:translateY(-7px)}}
+.xpbar{height:12px;border-radius:2px;background:repeating-linear-gradient(90deg,#e8e3fb 0 8px,#f2effc 8px 10px);border:1px solid var(--ln)}.xpbar i{border-radius:0;background:linear-gradient(90deg,#35e08a,#19cde8,#8a5cff,#ff3bb5);background-size:200% 100%;box-shadow:0 0 10px rgba(25,205,232,.6);animation:grow 1.1s cubic-bezier(.2,.8,.2,1) both,sh 3s linear infinite}
+@keyframes grow{from{width:0!important}}@keyframes sh{to{background-position:200% 0}}
+.bar{border-radius:2px;background:repeating-linear-gradient(90deg,#e8e3fb 0 8px,#f2effc 8px 10px)}.bar i{background:linear-gradient(90deg,#35e08a,#19cde8,#8a5cff);background-size:200% 100%;animation:sh 3s linear infinite;box-shadow:0 0 10px rgba(0,150,199,.7)}
+.rank{background:rgba(12,154,94,.12);color:var(--A);border:1px solid var(--A);border-radius:2px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.meta,.xpl{color:var(--mu)}
+.dx svg,.bdex svg,.resulthead>svg{transform-origin:50% 100%;animation:idle 3.2s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(90,70,200,.3))}
+@keyframes idle{0%,100%{transform:translateY(0) rotate(0)}30%{transform:translateY(-5px) rotate(-1.5deg)}60%{transform:translateY(0) rotate(1.2deg)}}
+.dx.joy svg,.resulthead>svg{animation:hop 1.1s ease-in-out infinite}
+@keyframes hop{0%,100%{transform:translateY(0) scale(1,1)}20%{transform:translateY(0) scale(1.05,.94)}45%{transform:translateY(-12px) scale(.97,1.05)}70%{transform:translateY(0) scale(1.03,.96)}}
+.dx.oops svg{animation:shk .55s ease-in-out 2}@keyframes shk{25%{transform:translateX(-5px) rotate(-3deg)}75%{transform:translateX(5px) rotate(3deg)}}
+.bub{background:#fff;border:1px solid var(--E);border-radius:3px;box-shadow:0 8px 18px -10px var(--E);animation:pop .45s cubic-bezier(.3,1.5,.5,1) both;transform-origin:0 100%}.bub::before{background:#ffffff;border-left:1px solid var(--E);border-bottom:1px solid var(--E)}
+.bub .who{color:var(--E);font-size:11px;letter-spacing:.12em;text-transform:uppercase}.bub .who::after{content:" // ai buddy";color:var(--mu)}
+.dx.joy .bub,.dx.joy .bub::before{border-color:var(--A)}.dx.oops .bub,.dx.oops .bub::before{border-color:var(--R)}.dx.think .bub,.dx.think .bub::before{border-color:var(--K)}
+@keyframes pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+.fb{animation:rise .4s both;border-left:4px solid}.fb.bad{animation:rise .4s both,shk2 .4s .1s}@keyframes shk2{30%{transform:translateX(-6px)}60%{transform:translateX(5px)}}
+.good{border-left-color:var(--A)}.bad{border-left-color:var(--R)}
+.path li::before{background:var(--ln)}.path li.done::before,.path li.now::before{background:linear-gradient(90deg,#35e08a,#19cde8);box-shadow:0 0 8px rgba(25,205,232,.7)}
+.node{background:#ffffff;border:2px solid var(--ln);color:var(--mu);border-radius:8px;transition:transform .2s}.node{width:32px;height:32px;margin:1px auto 8px}
+.path button:hover .node{transform:scale(1.15)}
+.done .node{background:rgba(12,154,94,.18);border-color:var(--A);color:var(--A);box-shadow:0 4px 12px -2px rgba(12,154,94,.55)}
+.now .node{background:rgba(0,150,199,.16);border-color:var(--E);color:var(--E);animation:pulse 1.8s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(0,150,199,.7)}100%{box-shadow:0 0 0 14px rgba(0,150,199,0)}}
+.nm{color:var(--mu);font-size:11.5px}
+.pill{background:#f7f5ff;border:1px solid var(--ln);border-radius:2px;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}.pill.ok{background:rgba(12,154,94,.14);color:var(--A);border-color:var(--A)}
+.stamp{color:var(--A);background:rgba(12,154,94,.1);border:2px solid var(--A);border-radius:2px;letter-spacing:.14em;box-shadow:0 6px 16px -6px rgba(12,154,94,.6)}
+.opt,.tg,.chip{background:#fff;border:1px solid var(--ln);border-radius:2px;color:var(--ink);transition:transform .15s,border-color .15s,background .15s,box-shadow .15s}.opt:hover,.tg:hover{transform:translateX(5px);border-color:var(--E);box-shadow:0 0 14px -4px var(--E)}.tg:has(input:checked){border-color:var(--E);background:rgba(0,150,199,.12)}.chip.on{background:var(--E);color:#0d0a2e;border-color:var(--E)}
+select,input[type=text]{background:#ffffff;color:var(--ink);border:1px solid var(--ln);border-radius:2px;font-family:'Share Tech Mono',monospace;font-size:15px;padding:8px 10px}select:focus,input:focus{border-color:var(--E);box-shadow:0 0 0 3px rgba(0,150,199,.22)}
+.b:focus-visible,.b2:focus-visible,nav button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--K);outline-offset:2px}
+.scn{background:rgba(0,150,199,.07);border-left:4px solid var(--E);border-radius:2px;font-style:normal;font-family:'Share Tech Mono',monospace}
+.hl{border-radius:2px}.he{background:rgba(0,150,199,.16);color:#044e68}.ha{background:rgba(12,154,94,.16);color:#075a37}.hr{background:rgba(214,23,156,.14);color:#7c0c58}.hc{border-bottom:3px dotted var(--K)}
+.avo{background:#fff;border:1px solid var(--ln);border-radius:4px;transition:transform .25s cubic-bezier(.3,1.6,.5,1),box-shadow .2s,border-color .2s}.avo:hover{transform:translateY(-6px) scale(1.1) rotate(-2deg);border-color:var(--E);box-shadow:0 0 22px -2px var(--E)}.avo:has(input:checked){transform:scale(1.08);border-color:var(--R);background:rgba(214,23,156,.1);box-shadow:0 0 0 2px var(--R),0 0 26px -2px var(--R)}
+.avo svg{animation:pop .5s both;filter:drop-shadow(0 4px 6px rgba(90,70,200,.3))}.avs .avo:nth-child(2) svg{animation-delay:.05s}.avs .avo:nth-child(3) svg{animation-delay:.1s}.avs .avo:nth-child(4) svg{animation-delay:.15s}.avs .avo:nth-child(5) svg{animation-delay:.2s}.avs .avo:nth-child(6) svg{animation-delay:.25s}.avs .avo:nth-child(7) svg{animation-delay:.3s}.avs .avo:nth-child(8) svg{animation-delay:.35s}
+dialog::backdrop{background:rgba(26,22,64,.45);backdrop-filter:blur(3px)}dialog{color:var(--ink)}
+.svgw{background:#fff;border:1px solid var(--ln);border-radius:3px;box-shadow:inset 0 0 40px -26px var(--V)}
+.svgw svg:not(#cv) g[data-id]>*{transform-box:fill-box;transform-origin:center;animation:node .5s cubic-bezier(.3,1.5,.5,1) both}.svgw svg:not(#cv) line{stroke-dasharray:600;animation:ln .7s ease-out both}
+@keyframes node{from{opacity:0;transform:scale(.4)}to{opacity:1;transform:none}}@keyframes ln{from{stroke-dashoffset:600}to{stroke-dashoffset:0}}
+.svgw text{filter:none}
+th{color:var(--E);font-size:12px;letter-spacing:.08em;text-transform:uppercase}th,td{border-bottom:1px solid var(--ln)}tr.me{background:rgba(214,23,156,.1)}tbody tr:hover td{background:rgba(0,150,199,.06)}
+.rk{border-radius:2px;background:#f1eeff;border:1px solid var(--ln);color:var(--mu)}.rk.r1{background:linear-gradient(135deg,#ffe14d,#ff9f1c);color:#0d0a2e;border-color:#ffe14d;animation:pulse2 2s infinite}.rk.r2{background:#c9d4ff;color:#0d0a2e;border-color:#c9d4ff}.rk.r3{background:#ff9a5a;color:#0d0a2e;border-color:#ff9a5a}@keyframes pulse2{50%{box-shadow:0 0 0 6px rgba(255,210,63,.25)}}
+#toast{background:#1a1640;color:#fff;border:1px solid var(--E);border-radius:3px;font-family:'Share Tech Mono',monospace}
+#xp{background:var(--g1);color:#0d0a2e;border-radius:2px;font-family:Orbitron,sans-serif;font-weight:800;box-shadow:0 8px 22px -6px var(--V)}
+.big{color:var(--ink);background:none;text-shadow:2px 0 rgba(255,59,181,.3),-2px 0 rgba(25,205,232,.4)}
+.streak{color:var(--K);border-color:var(--K);border-radius:2px}.pips{color:var(--K)}
+.thm{display:none!important}
+#prof{border:1px solid var(--ln);border-radius:3px;background:#fff}
+mark,.mu a{color:var(--E)}
+#conf{position:fixed;inset:0;pointer-events:none;z-index:80}
+
+
+.campus{position:fixed;left:0;right:0;bottom:0;height:42vh;z-index:0;pointer-events:none}.campus svg{width:100%;height:100%;display:block}
+.campus .rl{animation:blink 2.4s ease-in-out infinite}.campus .rl:nth-of-type(2n){animation-delay:-1.2s}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+.campus .drone{animation:fly 26s linear infinite}@keyframes fly{from{transform:translateX(-120px)}to{transform:translateX(1720px)}}
+.campus .drone g{animation:hov 2s ease-in-out infinite}@keyframes hov{50%{transform:translateY(5px)}}
+.campus .cl{animation:drift 60s linear infinite alternate}@keyframes drift{to{transform:translateX(90px)}}
+.campus .wd{animation:blink 3.5s ease-in-out infinite}.campus .wd:nth-of-type(3n){animation-delay:-1s}.campus .wd:nth-of-type(3n+1){animation-delay:-2.3s}
+@media(max-width:760px){.campus{height:30vh;opacity:.8}}
+@media(prefers-reduced-motion:reduce){.campus *{animation:none!important}}
+nav button{--c:var(--V)}
+
+.svgw.cvw{overflow:hidden;touch-action:none;padding:0}.svgw.cvw svg#cv{width:100%;min-width:0;max-width:none;height:auto;aspect-ratio:1000/620;max-height:none;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+@media(max-width:760px){.svgw.cvw svg#cv{height:64vh;aspect-ratio:auto}#zm .mu{flex-basis:100%}}
+
+@media(pointer:coarse){select,input,textarea{font-size:16px!important}.b,.b2,.opt,nav button{min-height:42px}}
+.vw{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:10px;margin:10px 0}.vw{max-width:760px}.vw video{width:100%;max-height:50vh;display:block;border-radius:8px;background:#0b1224;aspect-ratio:16/9}.vc{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap}.vbar{flex:1;min-width:120px;height:12px;border-radius:6px;background:var(--ln);position:relative;cursor:pointer;overflow:hidden}.vbar i{position:absolute;left:0;top:0;bottom:0;display:block}.vbar #lvm{background:#9ac3ff;opacity:.6}.vbar #lvf{background:var(--E)}.vbar:focus-visible{outline:2px solid var(--E);outline-offset:2px}.vmsg{margin:8px 0 0;font-size:14px;color:var(--mu)}.vmsg.vok{color:var(--A);font-weight:600}.vmsg.verr{color:#c0392b;font-weight:600}.b:disabled{opacity:.45;cursor:not-allowed}nav button.lk{opacity:.55}nav button.lk::after{content:"🔒";margin-left:auto;font-size:12px}
+.rt{border-collapse:collapse;margin:6px 0;font-size:14px;background:#fff}.rt th,.rt td{border:1px solid var(--ln);padding:6px 12px;text-align:center}.rt th{background:#2a2a82;color:#fff;font-weight:700}.rt th small{display:block;color:#ffd24a;font-weight:600;font-size:11px}.rt td.hot{outline:2px solid #d6179c;outline-offset:-2px;background:#ffe7f3;font-weight:700}.rtw{overflow-x:auto;margin:8px 0}
+.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:10px 0}.gal .card{margin:0}.gal svg{max-width:100%}
+ul.bl{padding-left:20px;margin:8px 0}ul.bl li{margin:4px 0}
+</style></head><body>
+<div class="app"><nav id="nav"></nav><main id="main"></main></div>
+<div id="toast" role="status"></div><div id="xp" role="status"></div><dialog id="avd"><h3>Pick your detective buddy</h3><div class="avs" id="avg"></div><button class="b2" id="avc">Close</button></dialog><dialog id="dl"><p id="dm"></p><button class="b2" id="dn">Cancel</button> <button class="b" id="dy">Yes, continue</button></dialog>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const C={E:'#0089b5',A:'#0c9a5e',K:'#c98a00',R:'#d6179c'};
+const SHEET_URL=''; // Paste the Google Apps Script Web App URL (ends with /exec) here. See Code.gs
+const KEY='erdd3',DKEY='erdd3_draw'; // different keys from Level 1 and Level 3, because all apps share the same github.io origin
+const S0=()=>({done:{},vid:0,best:0,att:0,ok:0,tot:0,lv:'',u:null,sent:0,pend:null,ex:{},assist:{}});
+let S=S0();
+try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}},fin=k=>{const first=!S.done[k];S.done[k]=1;save();if(first)gain(100);if(ready())send()};
+const shuf=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+function ask(m,cb){$('#dm').textContent=m;$('#dl').showModal();$('#dn').onclick=()=>$('#dl').close();$('#dy').onclick=()=>{$('#dl').close();cb()}}
+/* ---------- Original student characters (avatars) and Dex (guide) ---------- */
+const SKN=['#f8d9bd','#eebd92','#d9a272','#b87a4b','#8d5a3b'],shade=(h,k)=>'#'+[1,3,5].map(i=>Math.max(0,Math.min(255,Math.round(parseInt(h.substr(i,2),16)*k))).toString(16).padStart(2,'0')).join('');
+const CH=[
+ {bg:'#ff2bd6',sk:SKN[1],k:'tudung',hj:'#2a1760',neon:'#ff2bd6',eye:'#00f0ff',top:'#17123c',ex:'monocle'},
+ {bg:'#00f0ff',sk:SKN[2],k:'songkok',hair:'#0b0a1c',neon:'#00f0ff',eye:'#00f0ff',top:'#0c2a3a',ex:'eye',gold:'#ffd23f'},
+ {bg:'#00ffc8',sk:SKN[0],k:'bob',hair:'#14122a',tip:'#00ffc8',neon:'#00ffc8',eye:'#ff4fd8',top:'#1b1f3f',ex:'visor'},
+ {bg:'#ff3355',sk:SKN[0],k:'swept',hair:'#121022',tip:'#ff3355',neon:'#ff3355',eye:'#ff3355',top:'#241420',ex:'mask'},
+ {bg:'#b36bff',sk:SKN[3],k:'long',hair:'#1a0f2e',tip:'#b36bff',neon:'#b36bff',eye:'#ffe14d',top:'#2a1450',ex:'bindi',gold:'#ffd23f'},
+ {bg:'#ffe14d',sk:SKN[3],k:'curly',hair:'#171220',tip:'#ffe14d',neon:'#ffe14d',eye:'#ffe14d',top:'#1c1a28',ex:'shades'},
+ {bg:'#ff8a1f',sk:SKN[2],k:'topknot',hair:'#100c18',tip:'#ff8a1f',neon:'#ff8a1f',eye:'#ff8a1f',top:'#2a160c',ex:'feather'},
+ {bg:'#8dff3c',sk:SKN[2],k:'sigah',hair:'#0f0c1a',tip:'#8dff3c',neon:'#8dff3c',eye:'#8dff3c',top:'#10301c',ex:'crown',gold:'#ffd23f'}];
+function bust(c){const sk=c.sk,sd=shade(sk,.8),N=c.neon,ink='#0b0a1c',hair=c.hair||ink,hj=c.hj,tip=c.tip||N,E=c.eye,G=c.gold||'#ffd23f',tp=c.top,
+ pat=(k=>{let s='';if(k=='tudung'||k=='songkok'||k=='long'||k=='sigah'){for(let i=0;i<5;i++){const x=14+i*9;s+=`<path d="M${x} 63 l4 -7 l4 7z" fill="none" stroke="${k=='sigah'?G:N}" stroke-width=".9" opacity=".85"/>`}}
+  else if(k=='topknot'){s=`<path d="M8 62 l4 -5 l4 5 l4 -5 l4 5 l4 -5 l4 5 l4 -5 l4 5 l4 -5 l4 5" fill="none" stroke="${N}" stroke-width="1.1"/>`}
+  else{s=`<path d="M10 63 L16 53 M54 63 L48 53" stroke="${N}" stroke-width="1"/><circle cx="32" cy="60" r="1.2" fill="${N}"/>`}return s})(c.k),
+ torso=`<path d="M3 64 Q5 49 32 47 Q59 49 61 64Z" fill="${tp}"/><path d="M3 64 Q5 49 32 47 L32 64Z" fill="#000" opacity=".22"/><path d="M5 60 Q8 50 22 48" stroke="${N}" stroke-width=".8" fill="none" opacity=".7"/>${pat}`,
+ collar=`<path d="M19 47.5 L26 53 L28 45Z M45 47.5 L38 53 L36 45Z" fill="${shade(tp,1.7)}" stroke="${N}" stroke-width=".8" stroke-linejoin="round"/>`,
+ neck=`<rect x="27.5" y="40" width="9" height="10" rx="3.5" fill="${sd}"/><rect x="27.5" y="44" width="9" height="1.2" fill="${N}" opacity=".7"/>`,
+ head=`<ellipse cx="32" cy="29.5" rx="12.5" ry="14" fill="${sk}"/><path d="M43.4 21 Q46 30 41.5 40" stroke="${N}" stroke-width="1" fill="none" opacity=".55" stroke-linecap="round"/>`,
+ ears=c.k=='tudung'?'':`<circle cx="19.6" cy="31" r="3" fill="${sk}"/><circle cx="44.4" cy="31" r="3" fill="${sk}"/>`,
+ eyes=`<ellipse cx="27" cy="31" rx="2" ry="2.5" fill="${ink}"/><ellipse cx="37" cy="31" rx="2" ry="2.5" fill="${ink}"/><ellipse cx="27" cy="31.3" rx="1.35" ry="1.8" fill="${E}"/><ellipse cx="37" cy="31.3" rx="1.35" ry="1.8" fill="${E}"/><circle cx="27.6" cy="30.2" r=".75" fill="#fff"/><circle cx="37.6" cy="30.2" r=".75" fill="#fff"/>`,
+ brows=col=>`<path d="M23.6 26.4 Q27 24.8 30.2 26 M33.8 26 Q37 24.8 40.4 26.4" stroke="${col}" stroke-width="1.3" fill="none" stroke-linecap="round"/>`,
+ mouth=`<path d="M28.8 37.4 Q32 40.4 35.2 37.4" stroke="#b0405a" stroke-width="1.5" fill="none" stroke-linecap="round"/>`,
+ blush=`<circle cx="23.2" cy="35" r="2.4" fill="${N}" opacity=".22"/><circle cx="40.8" cy="35" r="2.4" fill="${N}" opacity=".22"/><path d="M32 33.2 q1.2 1.5 -.2 2" stroke="${shade(sk,.68)}" stroke-width=".9" fill="none" stroke-linecap="round"/>`;
+ let back='',front='',acc='',bw=hair,m=mouth,eyed=eyes;
+ if(c.k=='tudung'){back=`<path d="M32 8.5 C18 8.5 13.5 20 14 33 C14.4 42 17 47 14.5 56 L49.5 56 C47 47 49.6 42 50 33 C50.5 20 46 8.5 32 8.5Z" fill="${hj}"/><path d="M14.5 56 L49.5 56 L49 52 Q32 60 15 52Z" fill="${shade(hj,1.4)}"/><ellipse cx="32" cy="29.5" rx="14.2" ry="16" fill="${shade(hj,.7)}"/><path d="M17 36 Q15 46 17 54 M47 36 Q49 46 47 54" stroke="${N}" stroke-width=".9" fill="none" opacity=".8"/>`;
+  front=`<path d="M19.5 22 Q32 10.5 44.5 22 Q40 17.5 32 17.5 Q24 17.5 19.5 22Z" fill="${hj}"/><ellipse cx="32" cy="29.5" rx="12.9" ry="14.5" fill="none" stroke="${N}" stroke-width="1.1"/><circle cx="19.6" cy="21" r="1.2" fill="${N}"/><circle cx="44.4" cy="21" r="1.2" fill="${N}"/>`;
+  acc=`<polygon points="37,26.4 40.6,28.4 40.6,32.6 37,34.6 33.4,32.6 33.4,28.4" fill="${E}" fill-opacity=".25" stroke="${E}" stroke-width=".9"/><path d="M40.6 30.5 L45.5 30.5 L47 26" stroke="${E}" stroke-width=".8" fill="none"/><path d="M35.2 29.6 h3.6 M35.2 31.4 h2.4" stroke="${E}" stroke-width=".6"/>`}
+ else if(c.k=='songkok'){front=`<path d="M18.8 30 Q17.8 22 19.8 18.5 L24 21.5 Q32 18.5 40 21.5 L44.2 18.5 Q46.2 22 45.2 30 Q44 24 32 24.5 Q20 24 18.8 30Z" fill="${hair}"/><path d="M19.4 21 L20.6 9 Q32 6.8 43.4 9 L44.6 21 Q32 17.6 19.4 21Z" fill="#0b0a1c" stroke="${N}" stroke-width=".7"/><path d="M19.6 19 Q32 15.6 44.4 19" stroke="${G}" stroke-width="1.5" fill="none"/><path d="M25 10.5 v4.5 h4 M39 10.5 v4.5 h-4 M32 9 v6" stroke="${N}" stroke-width=".8" fill="none"/><circle cx="32" cy="13" r="1.7" fill="${G}"/>`;
+  eyed=eyes.replace(/<ellipse cx="37"[^>]*\/><ellipse cx="37"[^>]*\/><circle cx="37[^>]*\/>/,'').replace(/<ellipse cx="37" cy="31"[^>]*\/>/,'');
+  acc=`<circle cx="37" cy="31" r="3.6" fill="#04141c" stroke="${N}" stroke-width="1"/><circle cx="37" cy="31" r="1.5" fill="${N}"/><path d="M33.2 31 h-1.4 M40.8 31 h1.4 M37 27.2 v-1.2 M37 34.8 v1.2" stroke="${N}" stroke-width=".8"/><path d="M40 34 l3 3 h4" stroke="${N}" stroke-width=".7" fill="none"/>`}
+ else if(c.k=='bob'){back=`<path d="M15.5 33 Q13.5 8.5 32 8.5 Q50.5 8.5 48.5 33 L48.5 43 Q45 46 41.5 43 L22.5 43 Q19 46 15.5 43Z" fill="${hair}"/><path d="M15.5 38 L15.5 43 Q19 46 22.5 43 L22.5 38Z M41.5 38 L41.5 43 Q45 46 48.5 43 L48.5 38Z" fill="${tip}"/>`;
+  front=`<path d="M18.5 27 Q22 13.5 33 14 Q44 14.5 45.5 27 Q40 19.5 32 21.5 Q24 19.5 18.5 27Z" fill="${hair}"/><path d="M17 27 Q20 13 32 12.5 Q44 13 47 27 Q44 17 32 17 Q20 17 17 27Z" fill="${hair}"/>`;
+  acc=`<path d="M16.4 28 Q15.6 10 32 10 Q48.4 10 47.6 28" stroke="#25234a" stroke-width="2.4" fill="none"/><path d="M19 12.5 L21 5 L27 10.5Z M45 12.5 L43 5 L37 10.5Z" fill="#25234a" stroke="${N}" stroke-width=".8" stroke-linejoin="round"/><rect x="13.4" y="26" width="5.6" height="10" rx="2.6" fill="#25234a"/><rect x="45" y="26" width="5.6" height="10" rx="2.6" fill="#25234a"/><rect x="14.8" y="28" width="2.8" height="6" rx="1.4" fill="${N}"/><rect x="46.4" y="28" width="2.8" height="6" rx="1.4" fill="${N}"/><rect x="21.2" y="27.2" width="21.6" height="7.4" rx="2.6" fill="${N}" fill-opacity=".2" stroke="${N}" stroke-width="1"/><path d="M23 29 h6 M35 33 h6" stroke="#fff" stroke-width=".7" opacity=".8"/><path d="M22.6 37.6 h3 l1.4 1.8 M41.4 37.6 h-3 l-1.4 1.8" stroke="${N}" stroke-width=".7" fill="none"/>`}
+ else if(c.k=='swept'){front=`<path d="M18.5 30 Q15.5 10.5 32 10.5 Q48 11 45.5 30 Q44.5 20 37 18.5 Q27 25 21 19 Q19.5 22 18.5 30Z" fill="${hair}"/><path d="M22 18.5 Q31 11 43 17" stroke="${tip}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
+  m='';acc=`<path d="M20.4 33.6 Q32 31 43.6 33.6 L42.4 41 Q32 46.5 21.6 41Z" fill="#150f22" stroke="${N}" stroke-width=".9"/><path d="M26 37 h3.5 M26 39.2 h3.5 M34.5 37 h3.5 M34.5 39.2 h3.5" stroke="${N}" stroke-width=".9"/><circle cx="32" cy="38.2" r="1.3" fill="${N}"/><path d="M44.4 29 Q49 32 45 39 L42 41" stroke="#8b86a8" stroke-width="1.2" fill="none"/><circle cx="44.6" cy="30" r="2.2" fill="#25234a" stroke="${N}" stroke-width=".8"/>`}
+ else if(c.k=='long'){back=`<path d="M14 33 Q11.5 7.5 32 8 Q52.5 7.5 50 33 Q50.5 48 56 62 L8 62 Q13.5 48 14 33Z" fill="${hair}"/><path d="M15.5 36 Q13 48 15 60 M49 36 Q51 48 49 60" stroke="${tip}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
+  front=`<path d="M17.5 30 Q15.5 11.5 32 11.5 Q48.5 11.5 46.5 30 Q45 20 34 17 Q24 23 17.5 30Z" fill="${hair}"/>`;
+  acc=`<path d="M10 58 Q32 46 54 58 L54 64 L10 64Z" fill="${N}" fill-opacity=".28" stroke="${N}" stroke-width=".9"/><circle cx="32" cy="22.4" r="1.2" fill="${E}"/><circle cx="34.6" cy="34.6" r=".8" fill="${G}"/><circle cx="19.6" cy="36.8" r="2" fill="none" stroke="${G}" stroke-width="1"/><circle cx="44.4" cy="36.8" r="2" fill="none" stroke="${G}" stroke-width="1"/><path d="M19.6 39 v4 M44.4 39 v4" stroke="${tip}" stroke-width="1"/>`}
+ else if(c.k=='curly'){front=[[22,19],[27,14.5],[33,13],[39,14.5],[44.5,19.5],[46.5,26],[17.5,26.5],[19.5,21]].map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="5.2" fill="${hair}" stroke="${tip}" stroke-width=".7" stroke-opacity=".7"/>`).join('')+`<path d="M20 26.5 Q19.5 20.5 25 19 Q32 21.8 39 19 Q44.5 20.5 44 26.5 Q41 21 32 21 Q23 21 20 26.5Z" fill="${hair}"/>`;
+  eyed='';acc=`<g fill="#12101f" stroke="${tip}" stroke-width="1"><circle cx="26.6" cy="31" r="4.7"/><circle cx="37.4" cy="31" r="4.7"/></g><path d="M31.3 30.4 h1.4" stroke="${tip}" stroke-width="1"/><path d="M23.5 29 Q25.5 27.4 28.5 28.2 M34.5 28.2 Q37 27.2 39.8 29" stroke="#ff4fd8" stroke-width="1" fill="none" opacity=".9" stroke-linecap="round"/><path d="M42 33 l2.2 2.2 h3.6 M44.8 25.6 l0 2.4 l2 2" stroke="${N}" stroke-width=".8" fill="none"/><circle cx="48" cy="35.2" r=".9" fill="${N}"/>`}
+ else if(c.k=='topknot'){back=`<circle cx="32" cy="7.4" r="4.6" fill="${hair}"/><circle cx="32" cy="7.4" r="4.6" fill="none" stroke="${tip}" stroke-width=".7"/>`;
+  front=`<path d="M18.8 30 Q16.5 11.5 32 11.5 Q47.5 11.5 45.2 30 Q44.4 20 32 19 Q19.8 20 18.8 30Z" fill="${hair}"/><path d="M18 24.4 Q32 18.6 46 24.4" stroke="${N}" stroke-width="2.6" fill="none"/><path d="M20 24 l1.6 -2 l1.6 2 l1.6 -2 l1.6 2 M33.6 22.8 l1.6 -2 l1.6 2 l1.6 -2 l1.6 2" stroke="#2a160c" stroke-width=".9" fill="none"/>`;
+  acc=`<path d="M41 21 Q51 14 52 6 Q51.5 17 44 24Z" fill="#00f0ff"/><path d="M43.4 22.4 Q55 18 58 12 Q54 22 46 25.4Z" fill="#ff2bd6"/><path d="M41 21 Q48 14 51.4 8" stroke="#fff" stroke-width=".6" fill="none" opacity=".7"/><path d="M5 62 Q6 52 16 50 L22 52 L14 62Z" fill="#150c06" stroke="${N}" stroke-width=".9"/><path d="M26.4 38 L28.4 40 M37.6 38 L35.6 40" stroke="${shade(sk,.62)}" stroke-width=".8"/>`}
+ else if(c.k=='sigah'){back=`<path d="M14 33 Q12 8 32 8.4 Q52 8 50 33 Q51 46 53 60 L11 60 Q13 46 14 33Z" fill="${hair}"/>`;
+  front=`<path d="M17.5 30 Q15.5 12 32 12 Q48.5 12 46.5 30 Q44.5 21 32 20 Q19.5 21 17.5 30Z" fill="${hair}"/><path d="M32 12.5 L32 21" stroke="#000" stroke-width=".7" opacity=".5"/>`;
+  acc=`<path d="M18.6 20.6 L22.4 9 L27.2 17.4 L32 6 L36.8 17.4 L41.6 9 L45.4 20.6 Q32 16 18.6 20.6Z" fill="#0f2a1a" stroke="${N}" stroke-width="1" stroke-linejoin="round"/><circle cx="22.4" cy="9" r="1.2" fill="${G}"/><circle cx="32" cy="6" r="1.3" fill="${G}"/><circle cx="41.6" cy="9" r="1.2" fill="${G}"/><path d="M32 8.5 L30.2 14 L32 17 L33.8 14Z" fill="${N}"/><path d="M19.2 30.6 L13.6 27 L14.6 35Z M44.8 30.6 L50.4 27 L49.4 35Z" fill="${N}" fill-opacity=".85"/>`}
+ const brw=brows(c.k=='tudung'?shade(hj,.5):hair=='#0b0a1c'||hair=='#100c18'||hair=='#0f0c1a'?'#0b0a1c':hair);
+ return back+torso+collar+neck+head+ears+blush+eyed+brw+m+front+acc}
+const TIERC=['#9db0d0','#2dd4ff','#00ffc8','#ff2bd6','#ffe14d'],TIER=[0,1,1,2,2,3,4];let _g=0;
+function sky(n){const T=`fill="${n}" fill-opacity=".16"`;return`<g ${T}><rect x="3" y="26" width="4.6" height="40"/><rect x="9" y="26" width="4.6" height="40"/><path d="M5.3 26 v-6 M11.3 26 v-6" stroke="${n}" stroke-opacity=".4" stroke-width=".7"/><rect x="5" y="40" width="9" height="2" /><rect x="54" y="30" width="1.8" height="40"/><ellipse cx="54.9" cy="29" rx="3.4" ry="2.4"/><path d="M54.9 26.6 v-8" stroke="${n}" stroke-opacity=".4" stroke-width=".7"/></g>`}
+function avatar(i,sz,name,tier){i=((+i)||0)%8;sz=sz||48;const c=CH[i],id='av'+(++_g),has=tier!=null,r=has?27.5:31;
+ return`<svg viewBox="0 0 64 64" width="${sz}" height="${sz}" role="img" aria-label="Avatar"><defs><clipPath id="${id}"><circle cx="32" cy="32" r="${r}"/></clipPath><radialGradient id="${id}g" cx="50%" cy="45%" r="65%"><stop offset="0" stop-color="${c.bg}" stop-opacity=".55"/><stop offset="1" stop-color="#0a0820"/></radialGradient></defs><circle cx="32" cy="32" r="${r}" fill="url(#${id}g)"/><g clip-path="url(#${id})">${sky(c.bg)}<path d="M0 63 H64 M0 56 H64" stroke="${c.bg}" stroke-opacity=".12" stroke-width=".6"/>${bust(c)}</g><circle cx="32" cy="32" r="${r}" fill="none" stroke="${c.bg}" stroke-opacity=".55" stroke-width=".9"/>${has?`<circle cx="32" cy="32" r="29.6" fill="none" stroke="${TIERC[TIER[Math.min(6,tier)]]}" stroke-width="2.6"/>`:''}</svg>`}
+
+/* Dex: AI study buddy */
+function dex(mood,sz,crop){mood=mood||'happy';sz=sz||96;const id='dx'+(++_g),C1='#00f0ff',C2='#ff2bd6',Y='#ffe14d',R='#ff3355',D='#05061a',
+ arm=(d)=>`<path d="${d}" stroke="#2c2866" stroke-width="10" fill="none" stroke-linecap="round"/><path d="${d}" stroke="${C1}" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-dasharray="2 5" opacity=".9"/>`,
+ hand=(x,y)=>`<circle cx="${x}" cy="${y}" r="6.4" fill="#3a3590" stroke="${C1}" stroke-width="1.6"/><circle cx="${x}" cy="${y}" r="2" fill="${C1}"/>`,
+ spark=(x,y,s,c)=>`<path d="M${x} ${y-s} l${s*.28} ${s*.72} l${s*.72} ${s*.28} l${-s*.72} ${s*.28} l${-s*.28} ${s*.72} l${-s*.28} ${-s*.72} l${-s*.72} ${-s*.28} l${s*.72} ${-s*.28}z" fill="${c}"/>`;
+ let eyes,mouth,arms,extra='',cls='';
+ if(mood=='joy'){eyes=`<path d="M47 52 Q52 44 57 52 M63 52 Q68 44 73 52" stroke="${Y}" stroke-width="3.6" fill="none" stroke-linecap="round"/>`;mouth=`<path d="M50 56 Q60 70 70 56Z" fill="${C2}"/><path d="M54 62 Q60 66 66 62" stroke="#fff" stroke-width="1" fill="none" opacity=".6"/>`;arms=arm('M30 98 Q10 92 14 66')+arm('M90 98 Q110 92 106 66')+hand(14,62)+hand(106,62);extra=spark(14,34,10,Y)+spark(108,32,8,C2)+spark(98,10,6,C1)+spark(24,12,5,C2)}
+ else if(mood=='think'){eyes=`<rect x="46" y="46" width="10" height="9" rx="3" fill="${C1}"/><rect x="64" y="46" width="10" height="9" rx="3" fill="${C1}"/><rect x="49.5" y="47" width="4" height="4" rx="1.5" fill="#fff"/><rect x="67.5" y="47" width="4" height="4" rx="1.5" fill="#fff"/><path d="M44 41 L57 43 M63 40 L77 36" stroke="${C1}" stroke-width="2" stroke-linecap="round"/>`;mouth=`<path d="M54 63 H66" stroke="${C1}" stroke-width="2.6" stroke-linecap="round"/>`;arms=arm('M30 98 Q18 110 24 122')+arm('M90 98 Q106 96 102 84')+hand(102,84);extra=`<circle cx="104" cy="66" r="12" fill="${C1}" fill-opacity=".16" stroke="${C1}" stroke-width="2.2"/><path d="M96 72 L90 82" stroke="${C1}" stroke-width="3" stroke-linecap="round"/><g fill="${Y}" font-family="Sora,sans-serif" font-weight="800" font-size="12" text-anchor="middle"><text x="26" y="24">?</text><text x="38" y="12" font-size="8">?</text></g>`}
+ else if(mood=='oops'){eyes=`<path d="M47 47 l9 9 M56 47 l-9 9 M64 47 l9 9 M73 47 l-9 9" stroke="${R}" stroke-width="3.4" stroke-linecap="round"/>`;mouth=`<path d="M51 66 Q55 60 60 65 Q65 60 69 66" stroke="${R}" stroke-width="2.8" fill="none" stroke-linecap="round"/>`;arms=arm('M30 98 Q18 110 24 122')+arm('M90 98 Q114 84 92 40')+hand(90,34);extra=`<path d="M22 34 q6 10 0 15 q-6 -5 0 -15z" fill="${C1}"/><path d="M36 30 h14 M70 22 h18" stroke="${R}" stroke-width="2" opacity=".8"/><path d="M33 70 h12" stroke="${C2}" stroke-width="1.6" opacity=".7"/>`}
+ else{eyes=`<ellipse cx="51" cy="51" rx="5.4" ry="6.4" fill="${C1}"/><ellipse cx="69" cy="51" rx="5.4" ry="6.4" fill="${C1}"/><circle cx="52.8" cy="48.6" r="1.9" fill="#fff"/><circle cx="70.8" cy="48.6" r="1.9" fill="#fff"/>`;mouth=`<path d="M52 62 Q60 69 68 62" stroke="${C1}" stroke-width="3" fill="none" stroke-linecap="round"/>`;arms=arm('M30 98 Q18 110 24 122')+arm('M90 98 Q112 92 104 70')+hand(104,66);extra=`<circle cx="108" cy="48" r="9" fill="${C2}" fill-opacity=".14" stroke="${C2}" stroke-width="1.6" stroke-dasharray="3 3"/>`}
+ const body=`<path d="M22 124 Q22 90 60 86 Q98 90 98 124Z" fill="#241f58" stroke="${C2}" stroke-width="1.8"/><path d="M40 92 Q60 104 80 92 L77 102 Q60 114 43 102Z" fill="#0d0b2e" stroke="${C1}" stroke-width="1.2"/><g fill="none" stroke="${Y}" stroke-width="1.5" opacity=".9"><path d="M38 124 l5 -9 l5 9 M72 124 l5 -9 l5 9 M55 124 l5 -9 l5 9"/></g><circle cx="60" cy="100" r="3.2" fill="${C2}"/>`,
+ head=`<rect x="55" y="74" width="10" height="14" rx="4" fill="#15123d"/><rect x="23" y="38" width="9" height="22" rx="4" fill="#2c2866" stroke="${C2}" stroke-width="1.6"/><rect x="88" y="38" width="9" height="22" rx="4" fill="#2c2866" stroke="${C2}" stroke-width="1.6"/><rect x="31" y="20" width="58" height="56" rx="24" fill="url(#${id})" stroke="${C1}" stroke-width="2.2"/><path d="M60 20 V12" stroke="${C1}" stroke-width="2.4"/><circle cx="60" cy="9.5" r="4.4" fill="${C2}"/><circle cx="60" cy="9.5" r="7.6" fill="none" stroke="${C2}" stroke-width="1" opacity=".5"/><rect x="38" y="36" width="44" height="32" rx="14" fill="${D}" stroke="${C1}" stroke-width="1.4"/><path d="M42 40 H78" stroke="${C1}" stroke-width=".6" opacity=".35"/><path d="M38.5 58 H81.5" stroke="${C1}" stroke-width=".6" opacity=".25"/>`;
+ const vb=crop?'26 4 68 76':'0 0 120 124',w=crop?68:120,h=crop?76:124;
+ return`<svg viewBox="${vb}" width="${sz}" height="${Math.round(sz*h/w)}" role="img" aria-label="Dex, your AI study buddy"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a43b8"/><stop offset="1" stop-color="#1c1850"/></linearGradient></defs>${body}${arms}${head}${eyes}${mouth}${extra}</svg>`}
+
+const say2=(mood,txt,sz)=>`<div class="dx ${mood}">${dex(mood,sz||68)}<div class=bub><b class=who>Dex</b>${txt}</div></div>`,pick=a=>a[Math.random()*a.length|0],
+ GOOD=['Well spotted.','That’s right.','Clean answer.','Good reading of the clues.'],
+ RANKS=['Fresher','Junior Analyst','Junior Analyst','Data Analyst','Data Analyst','Database Designer','Lead Architect'],
+ pips=p=>{const n=p>=.9?3:p>=.7?2:1;return`<span class=pips aria-label="${n} of 3">${'●'.repeat(n)+'○'.repeat(3-n)}</span>`};
+const xpv=()=>Object.keys(S.done).length*100+Object.keys(S.ex).length*40+(S.best||0),lvl=()=>Math.floor(xpv()/150)+1;
+let xt;function gain(n){const e=$('#xp');if(!e)return;e.textContent='+'+n+' XP';e.style.display='block';clearTimeout(xt);xt=setTimeout(()=>e.style.display='none',2200)}
+/* ---------- Level 3 exercise data (Enhanced ER model: weak entity, composite entity, superclass / subclass) ---------- */
+const PC='#7a45ff';
+/* helper: place attributes on an arc around an entity (used by sample answers) */
+function ring(N,Ed,e,names,flags,a0,a1,r,id){names.forEach((a,j)=>{const n=names.length,th=(n==1?(a0+a1)/2:a0+(a1-a0)*j/(n-1))*Math.PI/180;N.push({id,t:'A',x:Math.round(e.x+r*Math.cos(th)),y:Math.round(e.y-r*Math.sin(th)),n:a,k:flags[j]|0});Ed.push([id,e.id]);id++});return id}
+const EX=[
+{id:1,kind:'weak',title:'Residential College and Room',
+ scen:'A university manages its residential colleges and the rooms inside them. Each college has a college code, college name and location. Each room has a room number, room type and capacity. Room numbers are only unique inside one college: every college has its own Room 101, Room 102 and so on. A room cannot exist without its college. One college has many rooms, and every room belongs to one college.',
+ strong:{n:'COLLEGE',a:['college_code','college_name','location'],k:'college_code'},
+ weak:{n:'ROOM',a:['room_no','room_type','capacity'],p:'room_no'},
+ rel:'HAS',ral:['has','have','contains','consists_of','includes','houses'],c:'1:M',
+ why:'Room numbers repeat in every college, so room_no cannot identify a room alone. ROOM depends on COLLEGE, so it is a weak entity with a partial key.',
+ ev:['Room numbers are only unique inside one college','A room cannot exist without its college'],
+ sample(){const N=[],E=[[1,3],[3,2]];N.push({id:1,t:'E',x:250,y:330,n:'COLLEGE'},{id:2,t:'W',x:750,y:330,n:'ROOM'},{id:3,t:'R',x:500,y:330,n:'HAS',c:'1:M'});let id=4;
+  id=ring(N,E,N[0],this.strong.a,[1,0,0],100,260,190,id);id=ring(N,E,N[1],this.weak.a,[2,0,0],-80,80,190,id);return{N,E,id}}},
+{id:2,kind:'comp',title:'Student and Course Registration',
+ scen:'A university lets students register for courses. Each student has a matric number and a student name. Each course has a course code, course name and credit hours. A student can register for many courses, and a course can be registered by many students. For every registration the university must also record the semester and the grade. The many-to-many relationship must be simplified so that it can be stored in a relational database.',
+ ents:[{n:'STUDENT',a:['matric_no','student_name'],k:'matric_no'},{n:'COURSE',a:['course_code','course_name','credit_hours'],k:'course_code'}],
+ comp:{n:'REGISTRATION',al:['registrations','registers','register','enrolment','enrollment','registered'],a:['matric_no','course_code','semester','grade'],keys:['matric_no','course_code']},
+ why:'A many-to-many relationship that has its own attributes (semester, grade) is turned into a composite entity. It holds the keys of both parents, and together they form its composite primary key.',
+ ev:['A student can register for many courses','a course can be registered by many students'],
+ sample(){const N=[],E=[[1,3],[3,2]];N.push({id:1,t:'E',x:230,y:170,n:'STUDENT'},{id:2,t:'E',x:770,y:170,n:'COURSE'},{id:3,t:'C',x:500,y:400,n:'REGISTRATION'});let id=4;
+  id=ring(N,E,N[0],this.ents[0].a,[1,0],110,170,150,id);id=ring(N,E,N[1],this.ents[1].a,[1,0,0],10,110,170,id);id=ring(N,E,N[2],this.comp.a,[1,1,0,0],195,345,160,id);return{N,E,id}}},
+{id:3,kind:'sub',title:'University Staff',
+ scen:'A university keeps information about its staff. Every staff member has a staff ID, a name, an email address and a department. Some staff are lecturers, and each lecturer has a teaching load. Some staff are researchers, and each researcher has a research area and a research grant amount. A staff member can be a lecturer, a researcher, or both at the same time.',
+ sup:{n:'STAFF',a:['staff_id','staff_name','email','department'],k:'staff_id'},
+ subs:[{n:'LECTURER',a:['teaching_load']},{n:'RESEARCHER',a:['research_area','grant_amount']}],con:'o',
+ why:'staff_id, staff_name, email and department are common to every staff member, so they sit in the superclass STAFF. Teaching load and research details are specific to each subclass. One staff member can be in both subclasses, so the constraint is overlap (o).',
+ ev:['A staff member can be a lecturer, a researcher, or both','Every staff member has a staff ID, a name, an email address and a department'],
+ sample(){const N=[],E=[];N.push({id:1,t:'E',x:500,y:120,n:'STAFF'},{id:2,t:'S',x:500,y:260,n:'',c:'o'},{id:3,t:'E',x:290,y:400,n:'LECTURER'},{id:4,t:'E',x:710,y:400,n:'RESEARCHER'});E.push([1,2],[2,3],[2,4]);let id=5;
+  id=ring(N,E,N[0],this.sup.a.slice(0,2),[1,0],150,210,190,id);id=ring(N,E,N[0],this.sup.a.slice(2),[0,0],330,30,190,id);
+  id=ring(N,E,N[2],this.subs[0].a,[0],270,270,140,id);id=ring(N,E,N[3],this.subs[1].a,[0,0],225,315,150,id);return{N,E,id}}}
+];
+const DRAW=[1,2,3],dn=id=>DRAW.indexOf(id)+1,exdone=()=>DRAW.filter(i=>S.ex[i]).length;
+/* name matching (lenient, so that students are not marked wrong for harmless spelling differences) */
+const AL={college_code:['college_id','college_no','kolej_code'],college_name:['name_of_college'],location:['college_location'],room_no:['room_number','room_id','roomno'],room_type:['type_of_room','roomtype'],capacity:['room_capacity','no_of_beds'],
+ matric_no:['matric_number','matric','matrix_no'],student_name:['name','student_nm','name_of_student'],course_code:['course_id','course_no','code'],course_name:['course_title','name_of_course'],credit_hours:['credit_hour','credits','credit'],semester:['sem','semester_no'],grade:['grade_obtained','result'],
+ staff_id:['staff_no','staff_number'],staff_name:['name','lecturer_name','staff_nm'],email:['email_address','e_mail'],department:['dept','department_name'],teaching_load:['teaching_hours','teach_load','teaching_hour'],research_area:['research_field','area_of_research','research'],grant_amount:['research_grant','grant','research_grant_amount','grant_amt']};
+const EA={COLLEGE:['residential_college','colleges','kolej'],ROOM:['rooms'],STUDENT:['students'],COURSE:['courses'],STAFF:['staffs'],LECTURER:['lecturers'],RESEARCHER:['researchers']};
+const nz=s=>String(s).toLowerCase().trim().replace(/[\s.\-]+/g,'_').replace(/[^a-z0-9_]/g,'').replace(/_+/g,'_').replace(/^_|_$/g,'');
+const attrMatch=(n,c)=>{const a=nz(n);return a==c||(AL[c]||[]).includes(a)};
+const entMatch=(n,e)=>{const a=nz(n),b=nz(e.n);return a==b||a==b+'s'||(EA[e.n]||[]).includes(a)};
+const relMatch=(n,x)=>{const a=nz(n);return a==nz(x.rel)||x.ral.includes(a)};
+const compMatch=(n,c)=>{const a=nz(n);return a==nz(c.n)||c.al.includes(a)};
+const revC=c=>c.split(':').reverse().join(':');
+
+/* ---------- Students & Google Sheet ---------- */
+const P={};
+const REQ=['A','B','C','D','E','F'],ready=()=>S.u&&REQ.every(k=>S.done[k]);
+let tt;function note(m){const t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(tt);tt=setTimeout(()=>t.style.display='none',6000)}
+const rec=()=>({level:3,name:S.u.n,matric:S.u.m,section:S.u.s,modules:REQ.filter(k=>S.done[k]).join(''),best:S.best,att:S.att,lv:S.lv,ok:S.ok,tot:S.tot,ex:exdone(),assist:Object.keys(S.assist).length,av:S.u.av||0,ts:new Date().toISOString()});
+const csv=p=>{const q=v=>'"'+String(v).replace(/"/g,'""')+'"';return'Time,Name,Matric,Section,Modules,Best score,Attempts,Level,Correct,Total,ERDs completed,Sample answers viewed\n'+[p.ts,p.name,p.matric,p.section,p.modules,p.best,p.att,p.lv,p.ok,p.tot,p.ex,p.assist].map(q).join(',')};
+async function dlF(n,t){try{const dw=window.claude&&await window.claude.use('downloads');if(dw)await dw.save({filename:n,data:new TextEncoder().encode(t)});else{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=n;a.click()}}catch(e){note('Download failed.')}}
+async function send(){if(!ready()){note('Complete all modules first. Data has not been sent.');return}const p=rec();
+ if(!SHEET_URL){S.pend=p;save();note('The Google Sheet link is not set. Download your record (CSV) from the Dashboard and give it to your lecturer.')}
+ else try{await fetch(SHEET_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(p)});S.sent=Date.now();S.pend=null;save();note('Results sent to your lecturer ✓')}catch(e){S.pend=p;save();note('Sending failed (no connection or blocked). Try again or download the CSV.')}
+ if(cur=='home')go('home')}
+const stat=()=>{const left=REQ.filter(k=>!S.done[k]);return`<div class=card><b>Submit to your lecturer</b><p class=mu>${left.length?'Complete first: '+left.map(k=>M.find(m=>m[0]==k)[1]).join(', ')+'. Data is sent only after all modules (learning, practice, three EERDs, quiz) are complete.':S.sent?'✅ Sent on '+new Date(S.sent).toLocaleString('en-MY')+'.':'All modules complete. Data not sent yet.'}</p>${left.length?'':'<button class=b id=sd>'+(S.sent?'Send again':'Send now')+'</button>'}${S.pend?'<button class=b2 id=cs>Download record (CSV)</button>':''}</div>`};
+const oldCard=()=>{let o=null;try{const a=JSON.parse(localStorage.getItem('erdd2')||'null');if(a&&a.u&&a.u.m)o=a.u}catch(e){}return o?`<div class=card><b>Welcome back!</b><p class=mu>Use your Level 3 details: ${esc(o.n)} (${esc(o.m)}, ${esc(o.s)}).</p><button class=b2 id=ol type=button>Use these details</button></div>`:''};
+P.reg=()=>{$('#main').innerHTML=`<h2>Register to begin <span class=lv>Level 3</span></h2>${say2('happy','Welcome to ERD Detective Level 3. This level is about the Enhanced ER model: weak entities, composite entities and superclasses. Enter your details and choose your avatar. Your results go to your lecturer when everything is complete.')}${oldCard()}<div class=card><label class=f for=rn>Full name</label><input type=text class=w id=rn maxlength=60 autocomplete=name><label class=f for=rm>Matric number</label><input type=text class=w id=rm maxlength=10 placeholder="e.g. AI240123"><label class=f for=rx>Section</label><select class=w id=rx><option value="">Select section…<option>Sec 1<option>Sec 2<option>Sec 3<option>Sec 4<option>Sec 5<option>Sec 6</select><fieldset class=avs><legend>Choose your avatar</legend>${CH.map((c,i)=>`<label class=avo><input type=radio name=av value=${i} ${i?'':'checked'}>${avatar(i,64)}</label>`).join('')}</fieldset><p id=er class=mu></p><button class=b id=rg>Start</button></div>`;
+ if($('#ol'))$('#ol').onclick=()=>{let o=null;try{o=JSON.parse(localStorage.getItem('erdd2')||'null').u}catch(e){}if(!o)return;$('#rn').value=o.n;$('#rm').value=o.m;$('#rx').value=o.s;const a=document.querySelector(`input[name=av][value="${(+o.av)||0}"]`);if(a)a.checked=true};
+ $('#rg').onclick=()=>{const n=$('#rn').value.trim().replace(/\s+/g,' '),m=$('#rm').value.trim().toUpperCase(),s=$('#rx').value,av=+(document.querySelector('input[name=av]:checked')||{value:0}).value,e=[];
+  if(!/^\p{L}[\p{L} .'\/-]{2,59}$/u.test(n))e.push('Name: 3–60 characters, letters only (no numbers or symbols).');
+  if(!/^[A-Z]{1,3}\d{4,8}$/.test(m))e.push('Invalid matric number (example: AI240123).');
+  if(!/^Sec [1-6]$/.test(s))e.push('Please choose your section (Sec 1 to Sec 6).');
+  if(e.length){$('#er').innerHTML=e.map(esc).join('<br>');return}
+  S={...S0(),u:{n,m,s,av}};Bs={};save();sd();go('home')}};
+/* ---------- Leaderboard ---------- */
+let LB=null;
+P.L=()=>{$('#main').innerHTML=`<h2>Leaderboard <span class=lv>Level 3</span></h2><p class=mu>Ranked by best quiz score, then fewest attempts, then fewest sample answers viewed. Only students who completed every module appear.</p><p><select id=lf aria-label="Filter by section"><option value="">All sections${[1,2,3,4,5,6].map(i=>`<option>Sec ${i}`).join('')}</select> <button class=b2 id=lr>Refresh</button></p><div class=card id=lt></div>`;
+ const mine=[S.u.m,S.u.m.slice(0,2)+'***'+S.u.m.slice(-3)],sec=x=>/^\d+$/.test(String(x.section).trim())?'Sec '+String(x.section).trim():String(x.section).trim();
+ const show=()=>{const f=$('#lf').value,r=(LB||[]).filter(x=>!f||sec(x)==f);$('#lt').innerHTML=r.length?`<div style="overflow-x:auto"><table class=lb><tr><th>#<th>Name<th>Matric<th>Section<th>Best score (%)<th>Attempts<th>Level<th>ERDs completed<th>Sample answers viewed<th>Correct answers<th>Total answered</tr>${r.map((x,i)=>`<tr${mine.includes(x.matric)?' class=me':''}><td><span class="rk ${i<3?'r'+(i+1):''}">${i+1}</span><td><span style="display:inline-flex;align-items:center;gap:10px">${avatar(x.av,30,x.name)}${esc(x.name)}</span><td>${esc(x.matric)}<td>${esc(sec(x))}<td>${esc(x.best)}<td>${esc(x.att)}<td>${esc(x.lv)}<td>${esc(Math.min(+x.ex||0,DRAW.length))}/${DRAW.length}<td>${esc(x.assist)}<td>${esc(x.ok)}<td>${esc(x.tot)}</tr>`).join('')}</table></div>`:'No results yet.'};
+ const load=async()=>{if(!SHEET_URL){$('#lt').textContent='The Google Sheet link is not set, so the leaderboard is unavailable.';return}
+  $('#lt').textContent='Loading…';try{const r=await fetch(SHEET_URL+'?action=board&level=3');LB=await r.json();show()}catch(e){$('#lt').textContent='Could not load the leaderboard. Check your connection, then press Refresh.'}};
+ $('#lf').onchange=show;$('#lr').onclick=load;load()};
+/* ---------- Chen Notation + Enhanced ER renderer ---------- */
+/* node types: E strong entity, W weak entity (double rectangle), C composite entity (diamond inside a rectangle),
+   A attribute (k: 0 normal, 1 key = solid underline, 2 partial key = dashed underline), R relationship (c = 1:1, 1:M, M:N),
+   S subclass circle (c = d, o or U) */
+function shp(n){const{t,x,y}=n,s=esc(n.n||''),L=s.length;
+ if(t=='E'){const w=Math.max(104,L*9+26);return`<rect x="${x-w/2}" y="${y-22}" width="${w}" height="44" fill="#e0f6fd" stroke="${C.E}" stroke-width="2.5"/><text x="${x}" y="${y+5}" text-anchor="middle" font-weight="700" fill="#04506a">${s}</text>`}
+ if(t=='W'){const w=Math.max(104,L*9+26);return`<rect x="${x-w/2-6}" y="${y-28}" width="${w+12}" height="56" fill="#e0f6fd" stroke="${C.E}" stroke-width="2.5"/><rect x="${x-w/2}" y="${y-22}" width="${w}" height="44" fill="#e0f6fd" stroke="${C.E}" stroke-width="2"/><text x="${x}" y="${y+5}" text-anchor="middle" font-weight="700" fill="#04506a">${s}</text>`}
+ if(t=='C'){const w=Math.max(170,L*10+72);return`<rect x="${x-w/2}" y="${y-34}" width="${w}" height="68" fill="#e0f6fd" stroke="${C.E}" stroke-width="2.5"/><polygon points="${x},${y-28} ${x+w/2-8},${y} ${x},${y+28} ${x-w/2+8},${y}" fill="#ffe1f4" stroke="${C.R}" stroke-width="2"/><text x="${x}" y="${y+5}" text-anchor="middle" font-weight="700" fill="#7c0c58">${s}</text>`}
+ if(t=='S')return`<circle cx="${x}" cy="${y}" r="17" fill="#fff" stroke="#3d2d9c" stroke-width="2.5"/><text x="${x}" y="${y+5.5}" text-anchor="middle" font-size="16" font-weight="800" fill="#3d2d9c">${esc(n.c||'')}</text>`;
+ if(t=='A'){const k=n.k|0,rx=Math.max(46,L*4.6+16),fill=k==1?'#fff4cf':k==2?'#f1ecff':'#e2f8ec',st=k==1?C.K:k==2?PC:C.A;
+  return`<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="22" fill="${fill}" stroke="${st}" stroke-width="2.5"/><text x="${x}" y="${y+5}" text-anchor="middle" fill="#0b4a2c"${k==1?' text-decoration="underline" font-weight="700"':k==2?' font-weight="700"':''}>${s}</text>${k==2?`<line x1="${x-L*3.7}" y1="${y+9.5}" x2="${x+L*3.7}" y2="${y+9.5}" stroke="#0b4a2c" stroke-width="1.5" stroke-dasharray="3.5 2.5"/>`:''}`}
+ const w=Math.max(64,L*7.2+16);return`<polygon points="${x},${y-34} ${x+w},${y} ${x},${y+34} ${x-w},${y}" fill="#ffe1f4" stroke="${C.R}" stroke-width="2.5"/><text x="${x}" y="${y+5}" text-anchor="middle" font-weight="700" fill="#7c0c58">${s}</text>`}
+const lbl=(x,y,t)=>`<text x="${x}" y="${y}" text-anchor="middle" font-weight="800" fill="#1a1640" stroke="#fff" stroke-width="4" paint-order="stroke">${t}</text>`;
+function draw(N,Ed,sel){const g=i=>N.find(n=>n.id==i),isE=n=>n.t=='E'||n.t=='W';let s='',top='';
+ Ed.forEach((e,i)=>{const a=g(e[0]),b=g(e[1]);if(!a||!b)return;
+  s+=`<line data-e="${i}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="#6b66a8" stroke-width="2"/><line data-e="${i}" x1="${a.x}" y1="${a.y}" x2="${b.x}" y2="${b.y}" stroke="transparent" stroke-width="22" pointer-events="stroke"/>`;
+  const r=a.t=='R'?a:b.t=='R'?b:0;
+  if(r&&r.c){const o=r==a?b:a,L=Ed.filter(q=>q.includes(r.id)).map(q=>q[0]==r.id?q[1]:q[0]),lb=r.c.split(':')[L.indexOf(o.id)];
+   if(lb)s+=lbl(o.x+(r.x-o.x)*.4,o.y+(r.y-o.y)*.4-9,lb)}
+  const c=a.t=='C'&&isE(b)?a:b.t=='C'&&isE(a)?b:0;
+  if(c){const o=c==a?b:a;s+=lbl(o.x+(c.x-o.x)*.28,o.y+(c.y-o.y)*.28-9,'1')+lbl(c.x+(o.x-c.x)*.28,c.y+(o.y-c.y)*.28-9,'M')}
+  const sc=a.t=='S'?a:b.t=='S'?b:0;
+  if(sc){const o=sc==a?b:a;if(o.y>sc.y+12){const d=Math.hypot(o.x-sc.x,o.y-sc.y)||1,ux=(o.x-sc.x)/d,uy=(o.y-sc.y)/d,px=sc.x+ux*46,py=sc.y+uy*46,nx=-uy,ny=ux;
+    top+=`<path d="M${px+nx*8} ${py+ny*8} Q${px+ux*13} ${py+uy*13} ${px-nx*8} ${py-ny*8}" fill="none" stroke="#3d2d9c" stroke-width="2.2"/>`}}});
+ s+=top;
+ N.forEach(n=>{const hw=n.t=='C'?105:75;s+=`<g data-id="${n.id}" style="cursor:grab">${n.id==sel?`<rect x="${n.x-hw}" y="${n.y-40}" width="${hw*2}" height="80" fill="none" stroke="#7a45ff" stroke-dasharray="5"/>`:''}${shp(n)}</g>`});return s}
+const svgW=(N,Ed,w,h,lg)=>`<div class="svgw${lg?' lg':''}"><svg viewBox="0 0 ${w} ${h}" font-family="Lexend,Arial,sans-serif" font-size="13">${draw(N,Ed)}</svg></div>`;
+/* hand-placed teaching diagrams (the same shapes the student draws in Module E) */
+const dg=(N,E,w,h)=>svgW(N,E,w,h||300,w>620);
+const sampleOf=x=>x.sample();
+const full=x=>{const L=sampleOf(x);return svgW(L.N,L.E,1000,620,1)};
+const rel=(a,r,b,c)=>svgW([{id:1,t:'E',x:110,y:70,n:a},{id:2,t:'R',x:300,y:70,n:r,c},{id:3,t:'E',x:490,y:70,n:b}],[[1,2],[2,3]],600,140);
+function star(e,at){const w=Math.max(560,at.length*150),N=[{id:0,t:'E',x:w/2,y:215,n:e}],Ed=[];at.forEach((a,i)=>{const k=a.endsWith('*');N.push({id:i+1,t:'A',x:(i+.5)*w/at.length,y:i%2?105:45,n:k?a.slice(0,-1):a,k:k?1:0});Ed.push([0,i+1])});return svgW(N,Ed,w,260,w>600)}
+/* ---------- navigation & pages ---------- */
+const M=[['home','Dashboard','#8a85c0'],['A','A. Learn EER','#0aa6d0'],['B','B. Spot the Construct','#13b870'],['C','C. Identify the Key','#e0a100'],['D','D. Superclass & Constraints','#e0189f'],['E','E. Draw 3 EERDs','#7a45ff'],['F','F. Challenge Quiz','#f0731a'],['L','Leaderboard','#e0a100'],['G','Lecturer Guide','#5b6b85']];
+$('#nav').innerHTML='<div class=brand>'+dex('happy',46,1)+'<div><h1>ERD Detective <span class=lv>Level 3</span></h1><small>DAT20103 Database · UTHM Pagoh</small></div></div>'+M.map(m=>`<button data-p="${m[0]}"><i style="background:${m[2]}"></i>${m[1]}</button>`).join('')+'<div id=prof></div><button class=thm id=thm>Theme: Auto</button>';
+$('#nav').onclick=e=>{const b=e.target.closest('button');if(b)go(b.dataset.p)};
+let cur='';function go(p){if(!S.u&&p!='G'){$('#prof').innerHTML='';P.reg();return}cur=p;document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p==p));{const nn=Object.keys(S.done).length;$('#prof').innerHTML=`${avatar(S.u.av,40,S.u.n,nn)}<div><b>${esc(S.u.n.split(' ')[0])}</b><br><span class=mu>${RANKS[nn]} · Lv ${lvl()}</span></div>`}if(!S.vid&&!VOPEN.includes(p)){cur='A';document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p=='A'));lockNav();P.A(3,'Watch the video in Module A first. Modules B to F unlock when it has been watched to the end.');scrollTo(0,0);return}lockNav();P[p]();scrollTo(0,0)}
+const DESC={A:'Weak entity, composite entity, superclass and subclass, explained step by step.',B:'Read short scenarios and decide which construct each one needs.',C:'Find the partial key, the composite key and the inherited key.',D:'Decide which attributes go to the superclass, then choose d, o or U.',E:'Draw three EERDs with weak, composite and subclass shapes. Hints check your work.',F:'20 mixed questions on the enhanced ER model, marked automatically.'};
+const IC={A:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M9 8h6"/>',B:'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/>',C:'<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9"/><path d="M16 7l3 3"/>',D:'<circle cx="5.5" cy="12" r="2.8"/><circle cx="18.5" cy="12" r="2.8"/><path d="M8.3 12h7.4"/>',E:'<path d="M4 20l1-4L16 5l3 3L8 19z"/><path d="M14 7l3 3"/>',F:'<path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H4v1a3 3 0 0 0 3 3"/><path d="M16 6h4v1a3 3 0 0 1-3 3"/><path d="M12 13v4"/><path d="M9 20h6"/>'};
+const ico=k=>`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${IC[k]}</svg>`;
+P.home=()=>{const n=Object.keys(S.done).length,ne=exdone(),nxt=REQ.find(k=>!S.done[k]),x=xpv(),lv=lvl(),first=esc(S.u.n.split(' ')[0]),
+ tip=!n?'Hi! Start with “A. Learn EER”. I’ll show you the three new constructs.':nxt?`Next up: ${M.find(m=>m[0]==nxt)[1]}. I’ll be here if you need a hint.`:'All done! Retake the quiz to raise your best score.';
+ $('#main').innerHTML=`<section class=brief><div class=bl><div class="who ava-lg">${avatar(S.u.av,92,S.u.n,n)}<div><h2>Welcome back, ${first}</h2><div class=meta><span class=rank>${RANKS[n]}</span>Level ${lv} · ${x} XP · ${esc(S.u.m)} · ${esc(S.u.s)}</div></div></div>
+ <div><div class=xpbar role=progressbar aria-label="XP to next level" aria-valuemin=0 aria-valuemax=150 aria-valuenow=${x%150}><i style="width:${(x%150)/150*100}%"></i></div><div class=xpl><span>${x%150} / 150 XP to Level ${lv+1}</span><span>${n}/6 modules · ERDs ${ne}/${DRAW.length}${S.lv?' · '+S.lv:''}</span></div></div>
+ <div class=acts>${nxt?`<button class=b id=go1>Continue: ${M.find(m=>m[0]==nxt)[1]}</button>`:''}<button class=b2 id=ca>Change avatar</button><button class=b2 id=sw>Not you?</button></div></div><div class=bdex><div class=bub>${tip}</div>${dex(n==6?'joy':'happy',150)}</div></section>
+ <ol class=path>${REQ.map(k=>`<li class="${S.done[k]?'done':k==nxt?'now':''}"><button onclick="go('${k}')" aria-label="${M.find(m=>m[0]==k)[1]}${S.done[k]?' (complete)':''}"><span class=node>${S.done[k]?'✓':k}</span><span class=nm>${M.find(m=>m[0]==k)[1].slice(3)}</span></button></li>`).join('')}</ol>
+ ${stat()}<div class=grid>${M.slice(1,7).map(m=>`<button class=card style="--c:${m[2]}" onclick="go('${m[0]}')"><span class=ic style="background:${m[2]}">${ico(m[0])}</span><h3>${m[1]}</h3><span class=mu>${DESC[m[0]]}</span><span class="pill ${S.done[m[0]]?'ok':''}">${S.done[m[0]]?'Complete':m[0]=='E'&&ne?`${ne}/${DRAW.length} ERDs`:'Not started'}</span></button>`).join('')}</div>
+ <p><button class=b2 id=rs>Reset progress</button></p>`;
+ $('#rs').onclick=()=>ask('All progress in this session will be deleted. Continue?',()=>{S={...S0(),u:S.u};Bs={};save();sd();go('home')});
+ $('#sw').onclick=()=>ask('Switch student? Progress for the current student will be removed from this browser.',()=>{S=S0();Bs={};save();sd();go('home')});
+ if($('#go1'))$('#go1').onclick=()=>go(nxt);
+ $('#ca').onclick=()=>{$('#avg').innerHTML=CH.map((c,i)=>`<button class=avo data-i=${i} aria-label="Character ${i+1}">${avatar(i,64)}</button>`).join('');$('#avd').showModal()};
+ if($('#sd'))$('#sd').onclick=send;if($('#cs'))$('#cs').onclick=()=>dlF('record-level3-'+S.u.m+'.csv',csv(S.pend))};
+$('#avg').onclick=e=>{const b=e.target.closest('[data-i]');if(b&&S.u){S.u.av=+b.dataset.i;save();$('#avd').close();go(cur||'home')}};$('#avc').onclick=()=>$('#avd').close();
+/* Module A: learn the enhanced ER model (based on Topic 4 Part 3) */
+const rt=(name,tag,cols,rows,hi)=>`<div class=rtw><b>${name}</b> <span class=mu>${tag}</span><table class=rt><tr>${cols.map(c=>`<th>${c[0]}${c[1]?`<small>${c[1]}</small>`:''}</th>`).join('')}</tr>${rows.map((r,i)=>`<tr>${r.map((v,j)=>`<td${hi&&hi(i,j)?' class=hot':''}>${esc(v)}</td>`).join('')}</tr>`).join('')}</table></div>`;
+const gal=a=>`<div class=gal>${a.map(([t,d,svg])=>`<div class=card><b>${t}</b>${svg}<p class=mu>${d}</p></div>`).join('')}</div>`;
+const mini=(N,w,h)=>svgW(N,[],w,h||90);
+/* teaching diagrams */
+const D_WEAK=()=>dg([{id:1,t:'E',x:170,y:215,n:'WORKER'},{id:2,t:'R',x:400,y:215,n:'has',c:'1:M'},{id:3,t:'W',x:645,y:215,n:'DEPENDENT'},
+ {id:4,t:'A',x:75,y:90,n:'worker_no',k:1},{id:5,t:'A',x:265,y:70,n:'worker_name'},{id:6,t:'A',x:555,y:70,n:'dependent_no',k:2},{id:7,t:'A',x:735,y:95,n:'dependent_name'}],
+ [[1,2],[2,3],[4,1],[5,1],[6,3],[7,3]],820,290);
+const D_BEFORE=()=>dg([{id:1,t:'E',x:130,y:150,n:'DOCTOR'},{id:2,t:'R',x:400,y:150,n:'treats',c:'M:N'},{id:3,t:'E',x:670,y:150,n:'PATIENT'},
+ {id:4,t:'A',x:80,y:50,n:'staff_no',k:1},{id:5,t:'A',x:230,y:35,n:'doctor_name'},{id:6,t:'A',x:570,y:35,n:'patient_no',k:1},{id:7,t:'A',x:730,y:50,n:'patient_name'},
+ {id:8,t:'A',x:300,y:250,n:'treatment_type'},{id:9,t:'A',x:500,y:250,n:'treatment_date'}],
+ [[1,2],[2,3],[4,1],[5,1],[6,3],[7,3],[8,2],[9,2]],860,300);
+const D_AFTER=()=>dg([{id:1,t:'E',x:120,y:110,n:'DOCTOR'},{id:2,t:'E',x:780,y:110,n:'PATIENT'},{id:3,t:'C',x:450,y:240,n:'TREATMENT'},
+ {id:4,t:'A',x:70,y:30,n:'staff_no',k:1},{id:5,t:'A',x:220,y:30,n:'doctor_name'},{id:6,t:'A',x:700,y:25,n:'patient_no',k:1},{id:7,t:'A',x:840,y:48,n:'patient_name'},
+ {id:8,t:'A',x:210,y:345,n:'staff_no',k:1},{id:9,t:'A',x:370,y:362,n:'patient_no',k:1},{id:10,t:'A',x:545,y:362,n:'treatment_type'},{id:11,t:'A',x:715,y:345,n:'treatment_date'}],
+ [[1,3],[3,2],[4,1],[5,1],[6,2],[7,2],[8,3],[9,3],[10,3],[11,3]],950,400);
+const D_WORKER=()=>dg([{id:1,t:'E',x:430,y:95,n:'WORKER'},{id:2,t:'S',x:430,y:205,n:'',c:''},{id:3,t:'E',x:170,y:320,n:'CONTRACT'},{id:4,t:'E',x:430,y:320,n:'PERMANENT'},{id:5,t:'E',x:700,y:320,n:'CONSULTANT'},
+ {id:6,t:'A',x:150,y:48,n:'emp_num',k:1},{id:7,t:'A',x:315,y:28,n:'name'},{id:8,t:'A',x:520,y:28,n:'address'},{id:9,t:'A',x:700,y:48,n:'hire_date'},
+ {id:10,t:'A',x:170,y:420,n:'payment_rate'},{id:11,t:'A',x:360,y:420,n:'salary'},{id:12,t:'A',x:505,y:420,n:'allowance'},{id:13,t:'A',x:645,y:420,n:'contract_num'},{id:14,t:'A',x:790,y:405,n:'rate'}],
+ [[1,2],[2,3],[2,4],[2,5],[6,1],[7,1],[8,1],[9,1],[10,3],[11,4],[12,4],[13,5],[14,5]],860,455);
+const D_VEH=c=>dg([{id:1,t:'E',x:430,y:95,n:'VEHICLE'},{id:2,t:'S',x:430,y:200,n:'',c},{id:3,t:'E',x:250,y:305,n:'CAR'},{id:4,t:'E',x:610,y:305,n:'LORRY'},
+ {id:5,t:'A',x:120,y:48,n:'vehicle_no',k:1},{id:6,t:'A',x:300,y:28,n:'vehicle_name'},{id:7,t:'A',x:520,y:28,n:'make'},{id:8,t:'A',x:700,y:48,n:'price'},{id:9,t:'A',x:250,y:400,n:'passenger'},{id:10,t:'A',x:610,y:400,n:'capacity'}],
+ [[1,2],[2,3],[2,4],[5,1],[6,1],[7,1],[8,1],[9,3],[10,4]],820,440);
+const D_FURN=c=>dg([{id:1,t:'E',x:430,y:95,n:'FURNITURE'},{id:2,t:'S',x:430,y:200,n:'',c},{id:3,t:'E',x:215,y:305,n:'MADE FURNITURE'},{id:4,t:'E',x:650,y:305,n:'PURCHASED FURNITURE'},
+ {id:5,t:'A',x:200,y:48,n:'furniture_code',k:1},{id:6,t:'A',x:430,y:28,n:'details'},{id:7,t:'A',x:640,y:48,n:'total_cost'},{id:8,t:'A',x:215,y:400,n:'carpenter_name'},{id:9,t:'A',x:520,y:400,n:'supplier_code'},{id:10,t:'A',x:740,y:400,n:'unit_price'}],
+ [[1,2],[2,3],[2,4],[5,1],[6,1],[7,1],[8,3],[9,4],[10,4]],860,440);
+const D_UNION=()=>dg([{id:1,t:'E',x:210,y:50,n:'INDIVIDUAL'},{id:2,t:'E',x:640,y:50,n:'ORGANIZATION'},{id:3,t:'S',x:425,y:150,n:'',c:'U'},{id:4,t:'E',x:425,y:255,n:'ASSET_OWNER'}],[[1,3],[2,3],[3,4]],850,300);
+const D_STUD=()=>dg([{id:1,t:'E',x:300,y:70,n:'STUDENT'},{id:2,t:'S',x:300,y:160,n:'',c:'d'},{id:3,t:'E',x:150,y:255,n:'DIPLOMA'},{id:4,t:'E',x:450,y:255,n:'DEGREE'},{id:5,t:'A',x:130,y:30,n:'matric_no',k:1},{id:6,t:'A',x:470,y:30,n:'student_name'}],[[1,2],[2,3],[2,4],[5,1],[6,1]],600,310);
+const VIDSRC='Superclass_Subclass_EERM_EN_web.mp4',VOPEN=['home','A','L','G'];
+/* Mandatory video: no skipping ahead until it has been watched once */
+function lvSetup(){
+ const v=$('#lvv'),pb=$('#lvp'),bar=$('#lvb'),fl=$('#lvf'),wm=$('#lvm'),tm=$('#lvt'),msg=$('#lvs');
+ let mx=0,done=!!S.vid;
+ const f=x=>{x=Math.max(0,x|0);return (x/60|0)+':'+String(x%60).padStart(2,'0')};
+ const paint=()=>{const d=v.duration||0;if(d){fl.style.width=(v.currentTime/d*100)+'%';wm.style.width=((done?d:mx)/d*100)+'%'}tm.textContent=f(v.currentTime)+' / '+f(d)};
+ const lim=()=>done?(v.duration||1e9):mx;
+ if(done)msg.innerHTML='✓ You have already watched this video. You can rewatch it or jump to any part.';
+ const unlock=()=>{if(done)return;done=true;S.vid=1;save();msg.innerHTML='✓ Video complete. The next step and the other modules are now unlocked.';msg.classList.add('vok');const n=$('#nx');if(n)n.disabled=false;lockNav();paint()};
+ const tog=()=>{if(v.paused){const p=v.play();if(p&&p.catch)p.catch(()=>{})}else v.pause()};
+ pb.onclick=tog;v.onclick=tog;
+ v.onplay=()=>{pb.textContent='❚❚ Pause'};
+ v.onpause=()=>{pb.textContent=v.ended?'↻ Replay':'▶ Play'};
+ v.ontimeupdate=()=>{if(!done&&!v.seeking&&v.currentTime<=mx+1.5)mx=Math.max(mx,v.currentTime);paint()};
+ v.onseeking=()=>{if(v.currentTime>lim()+.5)v.currentTime=lim()};
+ v.onseeked=paint;
+ v.onratechange=()=>{if(v.playbackRate!=1)v.playbackRate=1};
+ v.onloadedmetadata=paint;v.ondurationchange=paint;
+ v.onended=()=>{if(!done&&mx>=(v.duration||0)-3)unlock();else if(!done){msg.textContent='Please watch the part you skipped, then the video can finish.';v.currentTime=mx}paint()};
+ v.onerror=()=>{msg.innerHTML='⚠ The video file could not be loaded. Tell your lecturer: the file <b>'+VIDSRC+'</b> must be in the same folder as this page.';msg.classList.add('verr')};
+ const seekTo=x=>{const d=v.duration;if(!d)return;v.currentTime=Math.max(0,Math.min(x,lim(),d))};
+ bar.onclick=e=>{const r=bar.getBoundingClientRect();seekTo((e.clientX-r.left)/r.width*(v.duration||0))};
+ bar.onkeydown=e=>{if(e.key=='ArrowRight'){seekTo(v.currentTime+5);e.preventDefault()}else if(e.key=='ArrowLeft'){seekTo(v.currentTime-5);e.preventDefault()}else if(e.key==' '||e.key=='Enter'){tog();e.preventDefault()}};
+ const vis=()=>{if(!document.body.contains(v)){document.removeEventListener('visibilitychange',vis);return}if(document.hidden&&!v.paused&&!done){v.pause();msg.textContent='Paused because you left this tab. Press Play to continue.'}};
+ document.addEventListener('visibilitychange',vis);
+ paint()}
+function lockNav(){document.querySelectorAll('nav button[data-p]').forEach(b=>b.classList.toggle('lk',!S.vid&&!VOPEN.includes(b.dataset.p)))}
+
+P.A=(st=0,note='')=>{
+ const DL=['The enhanced model adds three new ideas to the basic ERD. Let’s meet them.','A weak entity cannot be identified by its own attributes alone. It needs help from a strong entity.','A many-to-many relationship that carries its own data becomes a composite entity.','Time for a short video. Watch it right to the end and the next step unlocks.','When entities share attributes, pull the common ones up into a superclass.','Disjoint, overlap or union? Ask whether one record can sit in more than one subclass.','Learn to spot the clue words. They tell you which construct the scenario needs.','Great. Now put it into practice, starting with Spot the Construct.'];
+ const T=[
+ ['The Enhanced ER model (EERM)','The enhanced entity-relationship model adds more meaning to the basic ERM.',
+  `<p>You already know entities, attributes, keys, relationships and cardinality. The <b>enhanced</b> model adds three new constructs for situations the basic ERD cannot describe well:</p>${gal([
+  ['Weak entity','Depends on another entity. Double rectangle, partial key.',mini([{id:1,t:'W',x:140,y:45,n:'DEPENDENT'}],280)],
+  ['Composite entity','A many-to-many relationship turned into an entity.',mini([{id:1,t:'C',x:140,y:45,n:'TREATMENT'}],280)],
+  ['Superclass and subclass','A general entity and its specialised categories, linked by a circle.',mini([{id:1,t:'S',x:140,y:45,n:'',c:'d'}],280)]])}<p class=mu>Plus three constraints on the circle: <b>d</b> (disjoint), <b>o</b> (overlap) and <b>U</b> (union).</p>`],
+ ['Weak entity','Depends on the presence of another entity.',
+  `<ul class=bl><li>A <b>strong entity</b> exists independently, for example DOCTOR, DEPARTMENT or PRODUCT.</li><li>A <b>weak entity</b> depends on another entity. It has <b>no primary key</b>, only a <b>partial key</b>.</li><li>It is identified only by combining its <b>partial key</b> with the <b>foreign key</b> of the strong entity.</li><li>Symbol: <b>double rectangle</b>. The partial key is underlined with a <b>dashed</b> line.</li></ul>${D_WEAK()}
+   <p><b>From ERD to tables.</b> The weak entity table gets the strong entity’s key as a foreign key (FK). FK + partial key together form the composite primary key.</p>
+   ${rt('WORKER','strong entity',[['worker_no','PK'],['worker_name','']],[['W001','Ahmad'],['W002','Siti']])}
+   ${rt('DEPENDENT','weak entity',[['worker_no','FK'],['dependent_no','partial key'],['dependent_name','']],[['W001','1','Aisyah'],['W001','2','Hafiz'],['W002','1','Daniel']],(i,j)=>j==1&&(i==0||i==2))}
+   <p class=mu>The red cells show why a partial key is not enough: dependent_no = 1 appears for both W001 and W002. Identity = <b>worker_no + dependent_no</b>. If a WORKER is deleted, their DEPENDENT rows disappear too.</p>`],
+ ['Composite entity','Simplify a many-to-many relationship.',
+  `<p>A many-to-many (M:N) relationship is allowed in the ER model, but it is <b>not directly supported</b> in the relational model. It can be simplified by turning the relationship into an entity: the <b>composite entity</b>.</p><p><b>Before</b>: DOCTOR and PATIENT linked by treats (M:N).</p>${D_BEFORE()}<p><b>After</b>: the relationship becomes the composite entity TREATMENT.</p>${D_AFTER()}
+  <ul class=bl><li>Symbol: a <b>diamond inside a rectangle</b>.</li><li>The M:N relationship becomes <b>two 1:M relationships</b>. <b>M</b> is placed at the composite entity, <b>1</b> at the original entities.</li><li>Each DOCTOR provides many TREATMENT, and each TREATMENT is provided by one DOCTOR. Each PATIENT receives many TREATMENT, and each TREATMENT is received by one PATIENT.</li><li>The composite entity has the <b>primary keys of both parents</b> as attributes. Together they form its <b>composite primary key</b> (both underlined).</li></ul>
+  ${rt('TREATMENT','composite entity',[['staff_no','PK, FK'],['patient_no','PK, FK'],['treatment_type',''],['treatment_date','']],[['S101','P201','Check-up','2025-03-02'],['S101','P202','Vaccination','2025-03-02'],['S102','P201','X-ray','2025-03-09']])}`],
+['Video lesson: Superclass and subclass','Watch the whole video to unlock the next step.',
+  `<p class=mu>About 7 minutes. It explains what the EERM is, then superclass and subclass, generalisation and specialisation, and the d, o and U constraints with examples. Headphones help.</p>
+   <div class=vw><video id=lvv preload=metadata playsinline disablepictureinpicture disableremoteplayback controlsList="nodownload noplaybackrate noremoteplayback" src="${VIDSRC}"></video>
+   <div class=vc><button class=b id=lvp type=button>▶ Play</button><div class=vbar id=lvb role=progressbar aria-label="Video progress" tabindex=0><i id=lvm></i><i id=lvf></i></div><span class=mu id=lvt>0:00 / 0:00</span></div>
+   <p class=vmsg id=lvs>You cannot skip ahead the first time. You can rewind and replay any part.</p></div>`],
+ ['Superclass and subclass','Share common attributes, keep specific ones apart.',
+  `<p>STUDENT has two categories, DIPLOMA and DEGREE. STUDENT is the <b>superclass</b>, DIPLOMA and DEGREE are the <b>subclasses</b>.</p>${D_STUD()}
+   <p>Look at these three entities. They share the same first four attributes:</p><ul class=bl><li><b>Contract worker:</b> worker_no, worker_name, address, date_begin, <i>hour_rate</i></li><li><b>Permanent worker:</b> worker_no, worker_name, address, date_begin, <i>basic_salary, allowance</i></li><li><b>Engaged consultant:</b> worker_no, worker_name, address, date_begin, <i>contract_no, pay_rate</i></li></ul>${D_WORKER()}
+   <ul class=bl><li>A <b>small circle</b> links the superclass and its subclasses. The ⊂ mark on the lines shows that a subclass is a <b>subset</b> of the superclass.</li><li><b>Common attributes</b> (and the key) are placed at the <b>superclass</b>. Subclasses keep only their <b>specific</b> attributes.</li></ul>
+   <div class=gal><div class=card><b>Generalisation</b><p class=mu>Minimise differences. Several entities (CAR, LORRY) share attributes, so identify the common attributes and pull them up into a new superclass (VEHICLE).</p></div><div class=card><b>Specialisation</b><p class=mu>The opposite. Maximise differences. One entity (FURNITURE) has members with distinguishing attributes, so split it into subclasses (MADE, PURCHASED).</p></div></div>`],
+ ['Constraints: d, o and U','Can one record belong to more than one subclass?',
+  `<div class=gal><div class=card><b>Disjoint rule (d)</b><p class=mu>No overlap. A superclass record can appear in <b>only one</b> subclass. A VEHICLE is either a CAR or a LORRY, but not both.</p></div><div class=card><b>Overlap rule (o)</b><p class=mu>Subclasses may overlap. A record can appear in <b>more than one</b> subclass. A FURNITURE item can be both made and purchased parts.</p></div></div>
+   <p><b>Disjoint (d)</b></p>${D_VEH('d')}<p><b>Overlap (o)</b></p>${D_FURN('o')}
+   <p><b>Union (U)</b>: a subclass can have <b>more than one superclass</b>. An ASSET_OWNER can be an INDIVIDUAL or an ORGANIZATION.</p>${D_UNION()}`],
+ ['Spot the clue words','Which construct does the scenario need?',
+  `<div style="overflow-x:auto"><table class=rt style="text-align:left"><tr><th>Clue in the scenario<th>Construct</tr>
+   <tr><td>“numbers restart / repeat for each…”, “cannot exist without…”<td><b>Weak entity</b>: double rectangle, partial key (dashed), FK from the strong entity</tr>
+   <tr><td>Many-to-many <b>and</b> it has its own data (date, grade, quantity)<td><b>Composite entity</b>: diamond in rectangle, two 1:M, composite PK</tr>
+   <tr><td>“Some X are A and some are B”, with shared attributes<td><b>Superclass and subclass</b>: circle, common attributes at the top</tr>
+   <tr><td>“…either A or B, not both”<td>Circle with <b>d</b> (disjoint)</tr>
+   <tr><td>“…can be both A and B”<td>Circle with <b>o</b> (overlap)</tr>
+   <tr><td>One entity can come from more than one superclass<td>Circle with <b>U</b> (union)</tr></table></div>
+   <p class=mu>Remember the cardinality rule from Level 3 still applies: only <b>1:1</b>, <b>1:M</b> and <b>M:N</b>, and the “one” side is written first.</p>`],
+ ['You are ready','Now practise the new constructs.',`<p>Next you will <b>spot the construct</b> in short scenarios, <b>identify the keys</b>, decide <b>superclass attributes and constraints</b>, then <b>draw three EERDs</b>.</p><p class=mu>Tip: in the drawing tool, use <b>＋ Weak entity</b>, <b>＋ Composite entity</b> and <b>＋ Subclass circle</b>.</p>`]][st];
+ $('#main').innerHTML=`<h2>Learn EER <span class=lv>Enhanced ER model</span></h2><div>${T&&[0,1,2,3,4,5,6,7].map(i=>`<span class="chip ${i==st?'on':''}">${i+1}</span>`).join('')}</div>${note?`<div class=card style="border-color:#e0a100"><b>🔒 ${note}</b></div>`:''}${say2(st==7?'joy':st==2||st==5?'think':'happy',DL[st],84)}<div class=card><h3>${T[0]}</h3><p><b>${T[1]}</b></p>${T[2]}</div>
+ ${st?'<button class=b2 id=pv>← Back</button>':''}${st<7?`<button class=b id=nx${st==3&&!S.vid?' disabled':''}>Next →</button>`:'<button class=b id=ok>Finish ✓</button>'}`;
+ if(st)$('#pv').onclick=()=>P.A(st-1);if(st<7)$('#nx').onclick=()=>P.A(st+1);else $('#ok').onclick=()=>{fin('A');go('home')};
+ if(st==3)lvSetup()};
+/* Generic one-question-at-a-time runner */
+let streak=0;
+function seq(k,title,items,qf){let i=0,sc=0;const m=$('#main');
+ const step=()=>{if(i>=items.length){fin(k);const p=sc/items.length;m.innerHTML=`<div class=card><div class=resulthead>${dex(p>=.7?'joy':'think',84)}<div><h2>${title}: complete</h2><p class=big>${Math.round(sc*10)/10} / ${items.length} ${pips(p)}</p><p>${p>=.8?'Strong result. You have this part covered.':'Good progress. Retry to improve your score.'}</p></div></div><button class=b onclick="go('${k}')">Try again</button><button class=b2 onclick="go('home')">Dashboard</button></div>`;return}
+  m.innerHTML=`<h2>${title}</h2><div class=bar><i style="width:${i/items.length*100}%"></i></div><p class=mu>Scenario ${i+1}/${items.length} · Score ${Math.round(sc*10)/10}</p><div class=card id=q></div><div id=fb></div>`;
+  qf(items[i],$('#q'),(ok,tot,html)=>{sc+=ok/tot;S.ok+=ok;S.tot+=tot;save();const full=ok==tot;streak=full?streak+1:0;
+   $('#fb').innerHTML=`<div class="card fb ${full?'good':'bad'}"><div class=verdict>${dex(full?'joy':ok?'think':'oops',46,1)}<b>${full?'Correct':ok?'Partly correct':'Not quite'}</b>${streak>1?`<span class=streak>${streak} correct in a row</span>`:''}</div><p>${html}</p></div><button class=b id=nx>${i+1<items.length?'Next':'See score'}</button>`;$('#nx').onclick=()=>{i++;step()};$('#nx').focus()})};step()}
+const chips=(nm,a)=>`<div class=tgs>${a.map(v=>`<label class=tg><input type=checkbox name="${nm}" value="${esc(v)}"> ${esc(v)}</label>`).join('')}</div>`;
+const picked=nm=>[...document.querySelectorAll(`input[name="${nm}"]:checked`)].map(i=>i.value);
+const score=(sel,good)=>{const tp=sel.filter(v=>good.includes(v)),fp=sel.filter(v=>!good.includes(v));return{fp,miss:good.filter(v=>!sel.includes(v)),pts:Math.max(0,tp.length-fp.length)}};
+const hd=x=>`<h3>Exercise ${x.id}: ${esc(x.title)}</h3><p class=scn>${esc(x.scen)}</p>`;
+/* Module B: spot the construct */
+const OPT=['Weak entity','Composite entity','Superclass and subclass','Ordinary relationship only'];
+const QS=[
+{s:'A company records its workers and their dependants. Each dependant is numbered 1, 2, 3 … for each worker, so “dependant 1” exists for many different workers. If a worker leaves the company, the dependants are also removed from the system.',a:0,w:'dependant_no repeats for every worker, and a dependant cannot exist without its worker. DEPENDENT is a weak entity with a partial key.'},
+{s:'A clinic records doctors and patients. A doctor treats many patients, and a patient is treated by many doctors. For every treatment the clinic must keep the treatment type and the treatment date.',a:1,w:'A many-to-many relationship that has its own attributes is simplified into a composite entity (TREATMENT).'},
+{s:'A dealer sells cars and lorries. Both have a vehicle number, vehicle name, make and price. Cars also record the number of passengers, and lorries record the load capacity.',a:2,w:'CAR and LORRY share attributes. Generalise them into the superclass VEHICLE and keep passenger and capacity in the subclasses.'},
+{s:'A bookstore keeps publishers and books. One publisher publishes many books, and each book has one publisher. Every book has its own ISBN and every publisher has its own publisher code.',a:3,w:'Both entities have their own key and exist independently. A normal 1:M relationship is enough.'},
+{s:'A student can register for many courses, and a course has many students. The faculty keeps the semester and the grade of each registration.',a:1,w:'M:N with its own attributes (semester, grade): create the composite entity REGISTRATION.'},
+{s:'A university has residential colleges, and every college has many rooms. Room 101 exists in every college, and a room cannot exist without its college.',a:0,w:'room_no repeats in each college and ROOM depends on COLLEGE: weak entity.'},
+{s:'A store sells furniture. Some furniture is made in the workshop (carpenter name). Other furniture is purchased from suppliers (supplier code and unit price). Every item has a furniture code and details.',a:2,w:'The common attributes go to FURNITURE, and MADE and PURCHASED become subclasses (specialisation).'},
+{s:'Each employee manages one store, and each store is managed by one employee. Both have their own ID.',a:3,w:'A simple 1:1 relationship. Nothing from the enhanced model is needed.'}];
+P.B=()=>seq('B','Spot the Construct',QS,(x,box,rep)=>{
+ box.innerHTML=`<p class=scn>${esc(x.s)}</p><p><b>Which construct does this scenario need?</b></p>${shuf(OPT.map((o,j)=>[o,j])).map(([o,j])=>`<label class=opt><input type=radio name=sc value=${j}> ${o}</label>`).join('')}<p id=er class=mu></p><button class=b id=ck>Check answer</button>`;
+ $('#ck').onclick=()=>{const v=document.querySelector('input[name=sc]:checked');if(!v){$('#er').textContent='Choose one option.';return}
+  $('#ck').remove();const ok=+v.value==x.a;rep(ok?1:0,1,`${ok?'✓':'✗'} Answer: <b>${OPT[x.a]}</b>.<br>${esc(x.w)}`)}});
+/* Module C: identify the key */
+const KQ=[
+{ent:'DEPENDENT',txt:'DEPENDENT is a weak entity of WORKER. Its attributes are worker_no (from WORKER), dependent_no (1, 2, 3 … for each worker) and dependent_name.',attrs:['worker_no','dependent_no','dependent_name'],p:'dependent_no',fk:'worker_no',kind:'weak'},
+{ent:'ROOM',txt:'ROOM is a weak entity of COLLEGE. Its attributes are college_code (from COLLEGE), room_no (101, 102 … in every college) and room_type.',attrs:['college_code','room_no','room_type'],p:'room_no',fk:'college_code',kind:'weak'},
+{ent:'SECTION',txt:'SECTION is a weak entity of COURSE. Every course has sections numbered 1, 2, 3 …, and a section cannot exist without its course. Its attributes are course_code (from COURSE), section_no and capacity.',attrs:['course_code','section_no','capacity'],p:'section_no',fk:'course_code',kind:'weak'},
+{ent:'TREATMENT',txt:'TREATMENT is a composite entity between DOCTOR and PATIENT. Its attributes are staff_no, patient_no, treatment_type and treatment_date.',attrs:['staff_no','patient_no','treatment_type','treatment_date'],pk:['staff_no','patient_no'],par:['DOCTOR','PATIENT'],kind:'comp'},
+{ent:'REGISTRATION',txt:'REGISTRATION is a composite entity between STUDENT and COURSE. Its attributes are matric_no, course_code, semester and grade.',attrs:['matric_no','course_code','semester','grade'],pk:['matric_no','course_code'],par:['STUDENT','COURSE'],kind:'comp'},
+{ent:'PERMANENT',txt:'PERMANENT is a subclass of the superclass WORKER. WORKER has worker_no (the key), worker_name, address and date_begin. PERMANENT adds basic_salary and allowance.',attrs:['basic_salary','allowance'],kind:'sub'}];
+P.C=()=>seq('C','Identify the Key',KQ,(x,box,rep)=>{
+ let qs;
+ if(x.kind=='weak')qs=[{q:`Which attribute is the <b>partial key</b> of ${x.ent}?`,o:x.attrs,a:x.p},{q:`What <b>uniquely identifies</b> one row of ${x.ent}?`,o:[`${x.p} only`,`${x.fk} + ${x.p}`,`${x.fk} only`,`${x.attrs[2]} + ${x.p}`],a:`${x.fk} + ${x.p}`}];
+ else if(x.kind=='comp')qs=[{q:`What is the <b>composite primary key</b> of ${x.ent}?`,o:[`${x.pk[0]} + ${x.pk[1]}`,`${x.pk[0]} only`,`${x.attrs[2]} + ${x.attrs[3]}`,`${x.pk[1]} + ${x.attrs[3]}`],a:`${x.pk[0]} + ${x.pk[1]}`},{q:`On the lines to ${x.par[0]} and ${x.par[1]}, where is <b>M</b> written?`,o:[`Next to ${x.ent} (the composite entity)`,`Next to ${x.par[0]} and ${x.par[1]}`],a:`Next to ${x.ent} (the composite entity)`}];
+ else qs=[{q:`Which attribute identifies a ${x.ent} record?`,o:['worker_no, inherited from WORKER',x.attrs[0],x.attrs[1],'a new key just for PERMANENT'],a:'worker_no, inherited from WORKER'},{q:'Where is <b>worker_name</b> stored?',o:['Only in the superclass WORKER','In every subclass as well','Only in PERMANENT'],a:'Only in the superclass WORKER'}];
+ box.innerHTML=`<p class=scn>${esc(x.txt)}</p>`+qs.map((q,i)=>`<div class=row><span>${q.q}</span><select id=kq${i}><option value="">Select…${shuf(q.o).map(o=>`<option>${esc(o)}`).join('')}</select></div>`).join('')+'<p id=er class=mu></p><button class=b id=ck>Check answer</button>';
+ $('#ck').onclick=()=>{const v=qs.map((q,i)=>$('#kq'+i).value);if(v.includes('')){$('#er').textContent='Please answer both questions.';return}
+  $('#ck').remove();const r=qs.map((q,i)=>v[i]==q.a),why=x.kind=='weak'?`A weak entity has <b>no primary key</b>. Its partial key (<b>${x.p}</b>) restarts for every ${x.fk=='worker_no'?'worker':x.fk=='college_code'?'college':'course'}, so it must be combined with the foreign key <b>${x.fk}</b>: identity = ${x.fk} + ${x.p}.`:x.kind=='comp'?`The composite entity takes the primary keys of both parents (<b>${x.pk[0]}</b> and <b>${x.pk[1]}</b>) and together they form its composite primary key. The relationship becomes two 1:M relationships, with M at the composite entity.`:'A subclass has no key of its own. It uses the superclass key, and the common attributes are stored only once, in the superclass.';
+  rep(r.filter(Boolean).length,2,qs.map((q,i)=>`${r[i]?'✓':'✗'} ${q.q.replace(/<\/?b>/g,'')} <b>${esc(q.a)}</b>`).join('<br>')+`<br><span class=mu>${why}</span>`)}});
+/* Module D: superclass attributes and constraints */
+const SQ=[
+{n:'Workers',s:'A company has contract workers, permanent workers and engaged consultants. All of them have a worker number, name, address and start date. Contract workers also have an hourly rate. Permanent workers have a basic salary and an allowance. Consultants have a contract number and a pay rate. A worker is only ever one of these three types.',all:['worker_no','worker_name','address','date_begin','hour_rate','basic_salary','allowance','contract_no','pay_rate'],sup:['worker_no','worker_name','address','date_begin'],sn:'WORKER',con:'d',w:'A worker is only one type, so the subclasses are disjoint (d).'},
+{n:'Vehicles',s:'A dealer sells cars and lorries. Every vehicle has a vehicle number, vehicle name, make and price. Cars record the number of passengers. Lorries record the load capacity. A vehicle is either a car or a lorry, never both.',all:['vehicle_no','vehicle_name','make','price','passenger','capacity'],sup:['vehicle_no','vehicle_name','make','price'],sn:'VEHICLE',con:'d',w:'A vehicle is a car or a lorry, not both: disjoint (d).'},
+{n:'Furniture',s:'A store keeps furniture records. Every item has a furniture code, details and a total cost. Some parts are made in the workshop (carpenter name). Other parts are purchased (supplier code, unit price). A cupboard can have self-made drawers and purchased hinges, so one item can be both made and purchased.',all:['furniture_code','details','total_cost','carpenter_name','supplier_code','unit_price'],sup:['furniture_code','details','total_cost'],sn:'FURNITURE',con:'o',w:'One furniture item can appear in both subclasses, so they overlap (o).'},
+{n:'Students',s:'A college has diploma students and degree students. Every student has a matric number and a name. Diploma students record an industrial training company. Degree students record a final year project title. A student follows only one programme type.',all:['matric_no','student_name','training_company','project_title'],sup:['matric_no','student_name'],sn:'STUDENT',con:'d',w:'A student is either diploma or degree: disjoint (d).'},
+{n:'Individuals',s:'A university system stores individuals with an ID, name, gender and date of birth. An individual can be a staff member (salary), a student (major) or an alumnus (degree). A staff member who studies part-time is both a staff member and a student.',all:['individual_id','name','gender','date_birth','salary','major','degree'],sup:['individual_id','name','gender','date_birth'],sn:'INDIVIDUAL',con:'o',w:'One individual can be a staff member and a student at the same time: overlap (o).'},
+{n:'Asset owners',type:'union',s:'A company records the owners of its assets. An owner can be an INDIVIDUAL (name, address) or an ORGANIZATION (registration number, address). Both kinds of owner are stored as ASSET_OWNER, which has an owner ID.',sub:'ASSET_OWNER',con:'U',w:'One entity (ASSET_OWNER) has more than one superclass (INDIVIDUAL and ORGANIZATION). That is a union (U).'}];
+const CONS={d:'Disjoint (d)',o:'Overlap (o)',U:'Union (U)'};
+P.D=()=>seq('D','Superclass and Constraints',SQ,(x,box,rep)=>{
+ const csel=`<div class=row>Constraint on the circle <select id=cs><option value="">Select…${Object.entries(CONS).map(([k,v])=>`<option value=${k}>${v}`).join('')}</select></div>`;
+ if(x.type=='union'){box.innerHTML=`<h3>${x.n}</h3><p class=scn>${esc(x.s)}</p>${csel}<div class=row>Which entity is the <b>subclass</b> (it has more than one superclass)? <select id=us><option value="">Select…<option>ASSET_OWNER<option>INDIVIDUAL<option>ORGANIZATION</select></div><p id=er class=mu></p><button class=b id=ck>Check answer</button>`;
+  $('#ck').onclick=()=>{const c=$('#cs').value,u=$('#us').value;if(!c||!u){$('#er').textContent='Please complete both choices.';return}$('#ck').remove();box.insertAdjacentHTML('beforeend',D_UNION());
+   const r=[c==x.con,u==x.sub];rep(r.filter(Boolean).length,2,`Constraint ${r[0]?'✓':'✗'} · Subclass ${r[1]?'✓':'✗'}.<br>${x.w}<br><span class=mu>In a union the arrow points to the subclass, ASSET_OWNER.</span>`)};return}
+ box.innerHTML=`<h3>${x.n}</h3><p class=scn>${esc(x.s)}</p><p><b>Step 1.</b> Tick the attributes that belong in the <b>superclass ${x.sn}</b> (the ones shared by every subclass).</p>${chips('sa',shuf(x.all))}<p><b>Step 2.</b></p>${csel}<p id=er class=mu></p><button class=b id=ck>Check answer</button>`;
+ $('#ck').onclick=()=>{const sel=picked('sa'),c=$('#cs').value;if(!sel.length||!c){$('#er').textContent='Tick the superclass attributes and choose the constraint.';return}
+  const s=score(sel,x.sup);$('#ck').remove();const sp=x.all.filter(a=>!x.sup.includes(a));
+  rep(s.pts+(c==x.con?1:0),x.sup.length+1,`Superclass attributes ${s.pts==x.sup.length?'✓':'✗'}: <b>${x.sup.join(', ')}</b> go to ${x.sn}.${s.fp.length?` (${s.fp.join(', ')} ${s.fp.length>1?'are':'is'} specific to a subclass.)`:''}<br>Specific to the subclasses: ${sp.join(', ')}.<br>Constraint ${c==x.con?'✓':'✗'}: ${x.w}`)}});
+/* Module F: quiz */
+const Q=(t,q,o,a,w)=>({t,q,o,a,w}),TOP={W:'Weak entities',C:'Composite entities',S:'Superclass and subclass',K:'Constraints (d, o, U)'};
+const QF=[
+Q('W','Which symbol is used for a weak entity?',['Double rectangle','Single rectangle','Rectangle with a diamond inside','A small circle'],0,'A weak entity is drawn as a double rectangle.'),
+Q('W','A weak entity has no primary key. What does it have instead?',['A partial key','A foreign key only','Nothing that identifies it','A composite entity'],0,'It has a partial key, which only identifies a record among the records of one strong entity.'),
+Q('W','How is one row of a weak entity uniquely identified?',['Partial key + foreign key from the strong entity','Partial key alone','Foreign key alone','Any attribute'],0,'The partial key is combined with the foreign key of the strong entity to form the composite primary key.'),
+Q('W','How is the partial key shown in the ERD?',['Underlined with a dashed line','Underlined with a solid line','Written in capital letters','Inside a double oval'],0,'A key is underlined with a solid line. A partial key is underlined with a dashed line.'),
+Q('W','What happens to the DEPENDENT rows when a WORKER is deleted?',['They are deleted too, because they depend on the worker','They stay unchanged','They become strong entities','They move to another worker'],0,'A weak entity depends on the presence of its strong entity, so it cannot exist without it.'),
+Q('C','Why is a many-to-many relationship simplified into a composite entity?',['The relational model does not directly support M:N','M:N is not allowed in an ERD','To reduce the number of attributes','To make the relationship weak'],0,'M:N is valid in the ER model, but it is not directly supported in the relational model.'),
+Q('C','Which symbol shows a composite entity?',['A diamond inside a rectangle','A double rectangle','A circle with d inside','A dashed ellipse'],0,'The composite entity is a diamond inside a rectangle.'),
+Q('C','The M:N relationship between DOCTOR and PATIENT becomes…',['Two 1:M relationships with the composite entity','Two M:N relationships','One 1:1 relationship','A weak entity'],0,'An M:N relationship is changed into two 1:M relationships.'),
+Q('C','On the lines to a composite entity, where is M written?',['Next to the composite entity','Next to the original entities','Next to both','It is not written'],0,'M is placed at the composite entity and 1 at the original entities.'),
+Q('C','REGISTRATION has matric_no, course_code, semester and grade. What is its primary key?',['matric_no + course_code','semester + grade','matric_no only','grade only'],0,'It takes the primary keys of both parents; together they form the composite primary key.'),
+Q('S','In a superclass and subclass diagram, where do the attributes common to all subclasses go?',['At the superclass','At every subclass','At the circle','On the lines'],0,'Common attributes are placed at the superclass. Subclasses keep only their specific attributes.'),
+Q('S','Generalisation is…',['Minimising differences by pulling common attributes into a superclass','Splitting one entity into several subclasses','Deleting a subclass','Making an attribute a key'],0,'Generalisation identifies common attributes and creates a superclass.'),
+Q('S','Specialisation is…',['Maximising differences by giving subclasses their distinguishing attributes','Merging two entities into one','Creating a weak entity','Choosing a primary key'],0,'Specialisation is the opposite of generalisation: one entity is split into subclasses.'),
+Q('S','CAR and LORRY both have vehicle_no, make and price. After generalisation, which entity holds these attributes?',['VEHICLE (the superclass)','CAR only','LORRY only','Neither'],0,'The common attributes move up to the new superclass VEHICLE.'),
+{t:'S',q:'Match each construct with how it is drawn.',m:[['Weak entity','Double rectangle'],['Composite entity','Diamond inside a rectangle'],['Superclass link','Small circle'],['Partial key','Dashed underline']],w:'Weak entity: double rectangle. Composite entity: diamond in a rectangle. The superclass and its subclasses are linked by a small circle. The partial key is underlined with a dashed line.'},
+Q('S','Which statement about subclasses is correct?',['A subclass inherits the superclass key and attributes','A subclass must have its own primary key','A subclass cannot have any attributes','A subclass is always a weak entity'],0,'Subclasses inherit from the superclass, so the key is not repeated in the subclass.'),
+Q('K','The disjoint rule (d) means…',['A superclass record can be in only one subclass','A record can be in many subclasses','A subclass has two superclasses','The subclass is weak'],0,'Disjoint: no overlap between the subclasses.'),
+Q('K','A furniture item can be both self-made and purchased. Which constraint fits?',['Overlap (o)','Disjoint (d)','Union (U)','No constraint'],0,'The same record can appear in more than one subclass: overlap.'),
+Q('K','A vehicle is either a car or a lorry, never both. Which constraint fits?',['Disjoint (d)','Overlap (o)','Union (U)','No constraint'],0,'Each vehicle appears in only one subclass: disjoint.'),
+Q('K','ASSET_OWNER can be an INDIVIDUAL or an ORGANIZATION. Which symbol is used?',['U (union)','d (disjoint)','o (overlap)','A double rectangle'],0,'A subclass with more than one superclass is shown with the union symbol U.')];
+P.F=()=>{const qs=shuf(QF).map(q=>q.o?{...q,s:shuf(q.o.map((x,i)=>[x,i==q.a]))}:{...q,s:shuf(q.m.map(x=>x[1]))});
+ $('#main').innerHTML=`<h2>Challenge Quiz <span class=lv>Level 3</span></h2><p class=mu>${qs.length} questions · questions and options are shuffled on every attempt.</p>`+qs.map((q,i)=>`<div class=card><p><b>${i+1}.</b> ${esc(q.q)}</p>${q.o?q.s.map((s,j)=>`<label class=opt><input type=radio name=q${i} value=${j}> ${esc(s[0])}</label>`).join(''):q.m.map((p,j)=>`<div class=row><b>${p[0]}</b><select id=m${i}_${j}><option value="">Select…${[...new Set(q.s)].map(x=>`<option>${x}`).join('')}</select></div>`).join('')}</div>`).join('')+'<p id=er class=mu></p><button class=b id=sb>Submit answers</button>';
+ $('#sb').onclick=()=>{let un=0;qs.forEach((q,i)=>{q.u=q.o?(document.querySelector(`input[name=q${i}]:checked`)||{}).value:q.m.map((p,j)=>$(`#m${i}_${j}`).value);if(q.o?q.u===undefined:q.u.includes(''))un++});
+  if(un){$('#er').textContent=`${un} question(s) still unanswered.`;return}
+  const wr=new Set();let sc=0;const rv=qs.map((q,i)=>{const ok=q.o?q.s[q.u][1]:q.m.every((p,j)=>q.u[j]==p[1]);ok?sc++:wr.add(q.t);return`<div class="card fb ${ok?'good':'bad'}"><b>${i+1}. ${ok?'✓ Correct':'✗ Incorrect'}</b> — ${esc(q.q)}<br>${q.o?`Your answer: ${esc(q.s[q.u][0])}<br>Correct answer: <b>${esc(q.o[q.a])}</b>`:''}<br><span class=mu>${esc(q.w)}</span></div>`}).join('');
+  const pc=Math.round(sc/qs.length*100),lv=pc>=90?'EER Expert':pc>=70?'EER Explorer':'Keep Practising';
+  S.att++;S.ok+=sc;S.tot+=qs.length;if(pc>=S.best){S.best=pc;S.lv=lv}fin('F');
+  $('#main').innerHTML=`<div class=card><div class=resulthead>${dex(pc>=70?'joy':'think',84)}<div><h2>${lv}</h2><p class=big>${sc} / ${qs.length} (${pc}%)</p></div></div><p>${wr.size?'Topics to revise: <b>'+[...wr].map(x=>TOP[x]).join(', ')+'</b>':'No topics to revise. Great job!'}</p><button class=b id=rt>Try again (shuffled)</button><button class=b2 onclick="go('home')">Dashboard</button></div>${rv}`;$('#rt').onclick=P.F}};
+/* Module E: EERD builder (3 exercises: DRAW) */
+const newB=()=>({N:[],E:[],id:1,sel:null,con:0,f:null,chk:0});let Bs={},B=newB(),cx=1;
+try{const d=JSON.parse(localStorage.getItem(DKEY)||'null');if(d&&S.u&&d.m==S.u.m)for(const k in d.d)Bs[k]={...newB(),...d.d[k]}}catch(e){}
+const sd=()=>{try{localStorage.setItem(DKEY,JSON.stringify({m:S.u&&S.u.m,d:Object.fromEntries(Object.entries(Bs).map(([k,v])=>[k,{N:v.N,E:v.E,id:v.id,chk:v.chk}]))}))}catch(e){}};
+const NM2={E:'ENTITY',W:'WEAK ENTITY',C:'COMPOSITE',A:'attribute',R:'RELATIONSHIP',S:''},VB='<defs><pattern id="gd" width="25" height="25" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1.2" fill="#d3ccf0"/></pattern></defs><rect width="1000" height="620" fill="#fff"/><rect width="1000" height="620" fill="url(#gd)"/>';
+/* canvas view: zoom and pan (works with touch, mouse wheel and buttons) */
+const WX=[-120,1120],WY=[-120,740],VWR=[260,1240];let V={x:0,y:0,w:1000,h:620};
+const cvR=()=>{const c=$('#cv'),r=c&&c.getBoundingClientRect();return r&&r.width?r:{width:1000,height:620,left:0,top:0}};
+const clampV=()=>{const r=cvR();V.w=Math.max(VWR[0],Math.min(VWR[1],V.w));V.h=V.w*r.height/r.width;const c=(v,a,b)=>a>b?(a+b)/2:Math.min(Math.max(v,a),b);V.x=c(V.x,WX[0],WX[1]-V.w);V.y=c(V.y,WY[0],WY[1]-V.h)};
+const applyV=()=>{const c=$('#cv');if(!c)return;clampV();c.setAttribute('viewBox',[V.x,V.y,V.w,V.h].map(v=>v.toFixed(1)).join(' '))};
+const zoomAt=(f,sx,sy)=>{const r=cvR(),fx=(sx-r.left)/r.width,fy=(sy-r.top)/r.height,wx=V.x+fx*V.w,wy=V.y+fy*V.h;V.w*=f;clampV();V.x=wx-fx*V.w;V.y=wy-fy*V.h;applyV()};
+function fitView(){const r=cvR(),asp=r.height/r.width,ns=B.N;
+ if(!ns.length){V.w=r.width<700?620:1000;V.x=500-V.w/2;V.y=310-V.w*asp/2}
+ else{const x0=Math.min(...ns.map(n=>n.x))-100,x1=Math.max(...ns.map(n=>n.x))+100,y0=Math.min(...ns.map(n=>n.y))-70,y1=Math.max(...ns.map(n=>n.y))+70;
+  V.w=Math.max(x1-x0,(y1-y0)/asp,420);V.x=(x0+x1)/2-V.w/2;V.y=(y0+y1)/2-V.w*asp/2}
+ applyV()}
+function showNode(n){applyV();if(n.x<V.x+60||n.x>V.x+V.w-60||n.y<V.y+45||n.y>V.y+V.h-45){V.x=n.x-V.w/2;V.y=n.y-V.h/2;applyV()}}
+function wheelInit(){const c=$('#cv');if(c)c.addEventListener('wheel',e=>{e.preventDefault();zoomAt(e.deltaY<0?1/1.15:1.15,e.clientX,e.clientY)},{passive:false})}
+const PT=new Map();let PAN=null,PINCH=null;
+document.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('#cv');if(!c)return;PT.set(e.pointerId,{x:e.clientX,y:e.clientY});
+ if(PT.size==2){B.dr=null;PAN=null;const[a,b]=[...PT.values()],r=cvR(),mx=(a.x+b.x)/2,my=(a.y+b.y)/2;PINCH={d:Math.hypot(a.x-b.x,a.y-b.y)||1,w:V.w,wx:V.x+(mx-r.left)/r.width*V.w,wy:V.y+(my-r.top)/r.height*V.h};return}
+ if(PT.size==1&&!e.target.closest('[data-id]'))PAN={x:e.clientX,y:e.clientY,vx:V.x,vy:V.y}});
+document.addEventListener('pointermove',e=>{if(!PT.has(e.pointerId))return;PT.set(e.pointerId,{x:e.clientX,y:e.clientY});const r=cvR();
+ if(PINCH&&PT.size>=2){const[a,b]=[...PT.values()],d=Math.hypot(a.x-b.x,a.y-b.y)||1,mx=(a.x+b.x)/2,my=(a.y+b.y)/2;V.w=PINCH.w*PINCH.d/d;clampV();V.x=PINCH.wx-(mx-r.left)/r.width*V.w;V.y=PINCH.wy-(my-r.top)/r.height*V.h;applyV();return}
+ if(PAN&&PT.size==1){V.x=PAN.vx-(e.clientX-PAN.x)/r.width*V.w;V.y=PAN.vy-(e.clientY-PAN.y)/r.height*V.h;applyV()}});
+['pointerup','pointercancel'].forEach(t=>document.addEventListener(t,e=>{PT.delete(e.pointerId);if(PT.size<2)PINCH=null;if(!PT.size)PAN=null}));
+addEventListener('resize',()=>{if($('#cv'))applyV()});
+P.E=()=>{B=Bs[cx]||(Bs[cx]=newB());const x=EX[cx-1];
+ $('#main').innerHTML=`<h2>Draw 3 EERDs <span class=lv id=exc></span></h2><div class=ex id=exs></div>
+ <div class=card><h3>Exercise ${dn(x.id)}: ${esc(x.title)}</h3><p class=scn>${esc(x.scen)}</p><p class=mu>Read the scenario and decide which enhanced constructs it needs (weak entity, composite entity, or a superclass with subclasses). Then draw the EERD in Chen Notation. Use only what the scenario states. Name attributes in snake_case (e.g. matric_no). Attributes: choose <b>Key</b> (solid underline) or <b>Partial key</b> (dashed underline) after selecting an attribute. Write cardinality as 1:1, 1:M or M:N.</p></div>
+ <div class=tool><button class=b data-a=E>＋ Entity</button><button class=b style="background:#0a6fa3" data-a=W>＋ Weak entity</button><button class=b style="background:#0a6fa3" data-a=C>＋ Composite entity</button><button class=b style="background:var(--A)" data-a=A>＋ Attribute</button><button class=b style="background:var(--R)" data-a=R>＋ Relationship</button><button class=b style="background:#3d2d9c" data-a=O>＋ Subclass circle</button><button class=b2 id=cn>🔗 Connect: Off</button><button class=b2 data-a=V>✔ Check ERD</button><button class=b2 data-a=S>Sample answer</button><button class=b2 data-a=X>⬇ Export PNG</button><button class=b2 data-a=Z>Clear</button></div>
+ <p class=mu id=ms>Tip: select an entity before adding an attribute and it appears next to it. Drag to move. Double-click (or double-tap) a line to delete it. Your drawings are saved in this browser.</p>
+ <div class=tool id=zm><button class=b2 data-a=ZI aria-label="Zoom in">＋ Zoom in</button><button class=b2 data-a=ZO aria-label="Zoom out">－ Zoom out</button><button class=b2 data-a=ZF aria-label="Fit all components in view">⤢ Fit all</button><span class=mu>Pinch or use the buttons to zoom. Drag the background to move around.</span></div>
+ <div class="svgw cvw"><svg id=cv viewBox="0 0 1000 620" font-family="Lexend,Arial,sans-serif" font-size="13"></svg></div><div class=card id=pn></div><div id=vd></div>`;exh();rd();fitView();wheelInit()};
+const exh=()=>{$('#exc').textContent=exdone()+'/'+DRAW.length+' done';$('#exs').innerHTML=EX.filter(y=>DRAW.includes(y.id)).map(y=>`<button class="b2 ${y.id==cx?'on':''}" data-x=${y.id}>${S.ex[y.id]?'✓ ':''}Exercise ${dn(y.id)}</button>`).join('')};
+const gn=i=>B.N.find(n=>n.id==i),say=t=>{$('#ms').textContent=t};
+const redraw=()=>{$('#cv').innerHTML=VB+draw(B.N,B.E,B.sel)};
+function rd(){redraw();pn();$('#cn').textContent='🔗 Connect: '+(B.con?'On':'Off');sd()}
+const cardUI=n=>{const ce=B.E.filter(q=>q.includes(n.id)).map(q=>gn(q[0]==n.id?q[1]:q[0])).filter(z=>z&&(z.t=='E'||z.t=='W'));
+ if(ce.length<2)return'<span class=mu>Cardinality: connect the diamond to two entities first.</span>';
+ const nm=z=>esc(z.n);return`Cardinality <select id=pc aria-label="Cardinality type"><option value="">Select<option>1:1<option>1:M<option>M:N</select> <span id=po></span>`};
+const cardInit=n=>{const ce=B.E.filter(q=>q.includes(n.id)).map(q=>gn(q[0]==n.id?q[1]:q[0])).filter(z=>z&&(z.t=='E'||z.t=='W'));if(ce.length<2||!$('#pc'))return;
+ const c=n.c||'',ty=c=='1:1'?'1:1':c=='1:M'||c=='M:1'?'1:M':c=='M:N'?'M:N':'',one=c=='M:1'?1:0;$('#pc').value=ty;
+ const po=()=>{$('#po').innerHTML=$('#pc').value=='1:M'?`The “one” side is <select id=pone aria-label="Which entity is the one side"><option value=0>${esc(ce[0].n)}<option value=1>${esc(ce[1].n)}</select>`:'';if($('#pone'))$('#pone').value=one_};
+ let one_=one;
+ const set=()=>{const v=$('#pc').value;if(v=='1:M')one_=+($('#pone')?$('#pone').value:one_);n.c=!v?'':v=='1:1'?'1:1':v=='M:N'?'M:N':(one_==0?'1:M':'M:1');rd()};
+ $('#pc').onchange=()=>{po();if($('#pone'))$('#pone').onchange=set;set()};po();if($('#pone'))$('#pone').onchange=set};
+function pn(){const n=gn(B.sel),TT={E:'Entity',W:'Weak entity',C:'Composite entity',A:'Attribute',R:'Relationship',S:'Subclass circle'};
+ if(!n){$('#pn').innerHTML='<span class=mu>Click a component to edit its name, type, key or cardinality.</span>';return}
+ $('#pn').innerHTML=`<span class=tag style="background:${n.t=='S'?'#3d2d9c':C['WC'.includes(n.t)?'E':n.t]}"></span><b>${TT[n.t]}</b> ${n.t!='S'?`<input type=text id=pnm value="${esc(n.n)}" maxlength=24 aria-label="Name">`:''} ${n.t=='A'?`<select id=pk aria-label="Attribute key type"><option value=0>Ordinary attribute<option value=1>Key (solid underline)<option value=2>Partial key (dashed underline)</select>`:''}${'EWC'.includes(n.t)?`<select id=pt aria-label="Entity type"><option value=E>Strong entity<option value=W>Weak entity<option value=C>Composite entity</select>`:''}${n.t=='S'?`<select id=ps aria-label="Subclass constraint"><option value="">Select constraint<option value=d>Disjoint (d)<option value=o>Overlap (o)<option value=U>Union (U)</select>`:''}${n.t=='R'?cardUI(n):''} <button class=b2 id=pd>Delete</button>`;
+ if(n.t!='S')$('#pnm').oninput=e=>{n.n=e.target.value.trim()?e.target.value:'?';redraw()};
+ if(n.t=='A'){$('#pk').value=n.k|0;$('#pk').onchange=e=>{n.k=+e.target.value;rd()}}
+ if('EWC'.includes(n.t)){$('#pt').value=n.t;$('#pt').onchange=e=>{n.t=e.target.value;rd()}}
+ if(n.t=='S'){$('#ps').value=n.c||'';$('#ps').onchange=e=>{n.c=e.target.value;rd()}}
+ if(n.t=='R')cardInit(n);
+ $('#pd').onclick=()=>{B.N=B.N.filter(x=>x!=n);B.E=B.E.filter(e=>!e.includes(n.id));B.sel=null;rd()}}
+function pt(e){const c=$('#cv'),p=c.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(c.getScreenCTM().inverse())}
+function link(a,b){const A=gn(a),Bn=gn(b),k=[A.t,Bn.t].sort().join(''),ct=i=>B.E.filter(e=>e.includes(i)).length,ent=n=>n.t=='E'||n.t=='W';
+ if(a==b||B.E.some(e=>e.includes(a)&&e.includes(b)))return'This connection already exists.';
+ const okp=['AC','AE','AW','CE','CW','ER','RW','ES','SW'];
+ if(!okp.includes(k)){
+  if(k=='AA')return'Connect an attribute to an entity, not to another attribute.';
+  if(k=='AR')return'An attribute must connect to an entity, not a relationship.';
+  if(k=='AS')return'The subclass circle has no attributes. Attributes belong to the entities.';
+  if(['EE','EW','WW'].includes(k))return'Two entities are connected through a relationship (diamond), a composite entity or a subclass circle, not directly.';
+  if(k=='RR')return'A relationship connects entities, not another relationship.';
+  if(['CR','CC'].includes(k))return'A composite entity connects directly to two entities. It does not need a relationship diamond.';
+  if(['CS','RS','SS'].includes(k))return'The subclass circle connects a superclass to its subclasses (entities).';
+  return'These two components cannot be connected.'}
+ if((A.t=='A'&&ct(a))||(Bn.t=='A'&&ct(b)))return'An attribute belongs to only one entity.';
+ const full=n=>(n.t=='R'||n.t=='C')&&B.E.filter(e=>e.includes(n.id)).filter(e=>ent(gn(e[0]==n.id?e[1]:e[0]))).length>=2;
+ if((full(A)&&ent(Bn))||(full(Bn)&&ent(A)))return'A relationship (or composite entity) connects exactly two entities.';
+ B.E.push([a,b]);return''}
+function spot(t){const ns=B.N,se=gn(B.sel),ref=se&&'EWC'.includes(se.t)?se:{x:500,y:310},base='EWC'.includes(t)?[[300,310],[700,310],[300,150],[700,150],[300,470],[700,470]]:t=='R'?[[500,310],[500,170],[500,450]]:t=='S'?[[500,250],[500,330]]:[],g=[];
+ for(let y=70;y<=560;y+=70)for(let x=80;x<=920;x+=105)g.push([x,y]);g.sort((a,b)=>Math.hypot(a[0]-ref.x,a[1]-ref.y)-Math.hypot(b[0]-ref.x,b[1]-ref.y));
+ return[...base,...g].find(p=>ns.every(n=>Math.abs(n.x-p[0])>140||Math.abs(n.y-p[1])>56))||[120+Math.random()*760|0,60+Math.random()*500|0]}
+document.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('#cv');if(!c)return;const g=e.target.closest('[data-id]');
+ if(!g){B.sel=null;B.f=null;rd();return}const id=+g.dataset.id;
+ if(B.con){if(!B.f){B.f=id;B.sel=id;say('Pick the second component to connect.')}else{const m=link(B.f,id);say(m||'Connected! Choose the cardinality on the relationship.');B.f=null;B.sel=id}rd();return}
+ const p=pt(e),n=gn(id);B.sel=id;B.dr={id,dx:n.x-p.x,dy:n.y-p.y};rd()});
+document.addEventListener('pointermove',e=>{if(!B.dr)return;const p=pt(e),n=gn(B.dr.id);n.x=Math.max(50,Math.min(950,p.x+B.dr.dx));n.y=Math.max(30,Math.min(590,p.y+B.dr.dy));redraw()});
+document.addEventListener('pointerup',()=>{if(B.dr){B.dr=null;pn();sd()}});
+let LT=0,LE=-1;document.addEventListener('pointerdown',e=>{const l=e.target.closest&&e.target.closest('[data-e]');if(!l||!$('#cv'))return;const t=Date.now(),i=+l.dataset.e;if(LE===i&&t-LT<500){LE=-1;B.E.splice(i,1);rd();say('Connection deleted.')}else{LE=i;LT=t}});
+document.addEventListener('click',e=>{if(!$('#cv'))return;const xb=e.target.closest('[data-x]');if(xb){cx=+xb.dataset.x;P.E();return}
+ const b=e.target.closest('[data-a]'),c=e.target.id=='cn';if(c){B.con=!B.con;B.f=null;rd();say(B.con?'Connect mode: click two components in turn. For a relationship, connect the first entity named in the exercise first.':'Connect mode off.');return}
+ if(!b)return;const a=b.dataset.a;
+ if('EWCARO'.includes(a)){const t=a=='O'?'S':a,p=spot(t),n={id:B.id++,t,x:p[0],y:p[1],n:t=='S'?'':NM2[t]+(B.N.filter(x=>x.t==t).length+1)};if(t=='S')n.c='';B.N.push(n);B.sel=n.id;rd();showNode(n);say('Component added. Select it to rename it, set its type, key or constraint below the canvas.')}
+ if(a=='ZI'||a=='ZO'){const r=cvR();zoomAt(a=='ZI'?.75:1.33,r.left+r.width/2,r.top+r.height/2)}
+ if(a=='ZF')fitView()
+ if(a=='S'){if(B.chk<3){say(`The sample answer unlocks after 3 unsuccessful checks (used: ${B.chk}). Keep trying!`);return}
+  ask('Load the sample answer? Your lecturer will see that you viewed it, and it replaces your current drawing.',()=>{const L=sampleOf(EX[cx-1]);Object.assign(B,{N:L.N,E:L.E,id:L.id,sel:null,con:0,f:null});S.assist[cx]=1;save();rd();fitView();say('Sample answer loaded. Study it, then press Check ERD.')})}
+ if(a=='Z')ask('All components on the canvas will be deleted. Continue?',()=>{Object.assign(B,newB());rd();fitView();$('#vd').innerHTML=''});
+ if(a=='V')val();if(a=='X')xp()});
+function val(){const x=EX[cx-1],h=[],ent=n=>n.t=='E'||n.t=='W',nb=i=>B.E.filter(e=>e.includes(i)).map(e=>gn(e[0]==i?e[1]:e[0])),
+ nodes=B.N.filter(n=>'EWC'.includes(n.t)),rs=B.N.filter(n=>n.t=='R'),ss=B.N.filter(n=>n.t=='S'),find=sp=>nodes.find(n=>entMatch(n.n,sp));
+ const TN={E:'a strong entity (single rectangle)',W:'a weak entity (double rectangle)',C:'a composite entity (diamond inside a rectangle)'};
+ const chk=(n,sn,list,keys,part,other)=>{const got={};
+  nb(n.id).filter(a=>a.t=='A').forEach(a=>{const c=list.find(z=>attrMatch(a.n,z));
+   if(c){if(got[c])h.push(`${sn} has “${a.n}” twice.`);got[c]=a}else h.push(other?other(a):`“${a.n}” is not stated for ${sn} in the scenario.`)});
+  list.filter(c=>!got[c]).forEach(c=>h.push(`${sn} is missing the attribute “${c}” (check the scenario).`));
+  list.forEach(c=>{const a=got[c];if(!a)return;const w=keys.includes(c)?1:c==part?2:0;if((a.k|0)==w)return;
+   h.push(w==1?`Underline “${c}” as a key attribute of ${sn} (choose “Key” on the attribute).`:w==2?`“${c}” is the partial key of ${sn}: choose “Partial key (dashed underline)”.`:a.k==1?`“${c}” should not be underlined as a key of ${sn}.`:`“${c}” is not a partial key.`)})};
+ const extra=specs=>nodes.forEach(n=>{if(!specs.some(e=>entMatch(n.n,e)))h.push(`“${n.n}” is not one of the entities in this scenario. Rename it or delete it.`)});
+ const need=(sp,n,t)=>{if(!n){h.push(`Entity ${sp.n} is missing (name it exactly as the object in the scenario).`);return}if(n.t!=t)h.push(`${sp.n} should be drawn as ${TN[t]}, not ${TN[n.t]}.`)};
+ if(!B.N.length)h.push('The canvas is empty. Start by adding the entities.');
+ if(x.kind=='weak'){
+  const s1=find(x.strong),w1=find(x.weak);extra([x.strong,x.weak]);
+  if(B.N.length){need(x.strong,s1,'E');need(x.weak,w1,'W')}
+  if(s1)chk(s1,x.strong.n,x.strong.a,[x.strong.k],null);
+  if(w1){chk(w1,x.weak.n,x.weak.a,[],x.weak.p);if(nb(w1.id).some(a=>a.t=='A'&&a.k==1))h.push(`A weak entity has no primary key of its own. Use a partial key (dashed underline) for ${x.weak.n}.`)}
+  if(ss.length)h.push('This scenario does not need a subclass circle.');
+  if(B.N.length&&!rs.length)h.push('Connect the two entities with a relationship (diamond).');
+  else if(rs.length>1)h.push('This scenario needs exactly one relationship.');
+  else if(rs.length){const r=rs[0],nn=nb(r.id).filter(ent),both=s1&&w1&&nn.includes(s1)&&nn.includes(w1)&&nn.length==2;
+   if(!both)h.push('Connect the relationship diamond to both entities.');
+   if(!relMatch(r.n,x))h.push(`The relationship name “${r.n}” does not match the scenario. Use the verb the scenario uses.`);
+   if(!/^[1MN]:[1MN]$/.test(r.c||''))h.push('Choose the cardinality on the relationship: 1:1, 1:M or M:N (select the diamond).');
+   else if(both){const first=B.E.filter(q=>q.includes(r.id)).map(q=>q[0]==r.id?q[1]:q[0])[0],c=first==s1.id?r.c:revC(r.c);
+    if(c.replace(/N/g,'M')!=x.c)h.push('The cardinality is not right. Re-read the “one / many” clues. Use 1:1, 1:M (the “one” side first) or M:N.')}}
+ }
+ if(x.kind=='comp'){
+  const e1=find(x.ents[0]),e2=find(x.ents[1]),cn=nodes.find(n=>compMatch(n.n,x.comp));extra([...x.ents,x.comp]);
+  if(B.N.length){need(x.ents[0],e1,'E');need(x.ents[1],e2,'E');
+   if(!cn)h.push(`The many-to-many relationship must be simplified. Add a composite entity (diamond inside a rectangle) between ${x.ents[0].n} and ${x.ents[1].n}, named after what is recorded (a noun such as ${x.comp.n}).`);
+   else if(cn.t!='C')h.push(`${cn.n} should be drawn as ${TN.C}, not ${TN[cn.t]}.`)}
+  if(rs.length)h.push('A composite entity replaces the many-to-many relationship, so no separate relationship diamond is needed. Delete it.');
+  if(cn&&e1&&e2){const nn=nb(cn.id).filter(ent);if(!(nn.includes(e1)&&nn.includes(e2)&&nn.length==2))h.push(`Connect the composite entity to both ${x.ents[0].n} and ${x.ents[1].n}.`)}
+  if(e1)chk(e1,x.ents[0].n,x.ents[0].a,[x.ents[0].k],null);if(e2)chk(e2,x.ents[1].n,x.ents[1].a,[x.ents[1].k],null);
+  if(cn)chk(cn,x.comp.n,x.comp.a,x.comp.keys,null);
+ }
+ if(x.kind=='sub'){
+  const sp=find(x.sup),sb=x.subs.map(s=>find(s));extra([x.sup,...x.subs]);
+  if(B.N.length){need(x.sup,sp,'E');x.subs.forEach((s,i)=>need(s,sb[i],'E'))}
+  if(rs.length)h.push('No relationship diamond is needed here. The superclass and its subclasses are linked through the circle.');
+  if(B.N.length&&!ss.length)h.push('Add a subclass circle to link the superclass and the subclasses.');
+  else if(ss.length>1)h.push('Use one circle for this superclass.');
+  else if(ss.length){const c=ss[0],nn=nb(c.id).filter(ent);
+   if(sp&&!nn.includes(sp))h.push(`Connect the circle to the superclass ${x.sup.n}.`);
+   x.subs.forEach((s,i)=>{if(sb[i]&&!nn.includes(sb[i]))h.push(`Connect the circle to the subclass ${s.n}.`)});
+   if(sp&&nn.includes(sp)&&sp.y>=c.y-10)h.push('Draw the superclass above the circle.');
+   x.subs.forEach((s,i)=>{if(sb[i]&&nn.includes(sb[i])&&sb[i].y<=c.y+10)h.push(`Draw the subclass ${s.n} below the circle.`)});
+   if(!c.c)h.push('Choose the constraint on the circle: disjoint (d), overlap (o) or union (U). Select the circle.');
+   else if(c.c!=x.con)h.push('The constraint on the circle is not right. Ask: can one staff member belong to more than one subclass?')}
+  if(sp)chk(sp,x.sup.n,x.sup.a,[x.sup.k],null);
+  x.subs.forEach((s,i)=>{if(sb[i])chk(sb[i],s.n,s.a,[],null,a=>x.sup.a.some(q=>attrMatch(a.n,q))?`“${a.n}” belongs to the superclass ${x.sup.n}. Subclasses inherit it, so do not repeat it in ${s.n}.`:`“${a.n}” is not stated for ${s.n} in the scenario.`)});
+ }
+ B.N.filter(n=>n.t=='A'&&!nb(n.id).length).forEach(a=>h.push(`Attribute “${a.n}” is not connected to an entity yet.`));
+ const done=!h.length;if(!done){B.chk++;sd()}
+ if(done){if(!S.ex[cx])gain(40);S.ex[cx]=1;save();if(exdone()==DRAW.length)fin('E')}
+ $('#vd').innerHTML=`<div class="card fb ${done?'good':'bad'}">${say2(done?'joy':'think',done?pick(GOOD):h.length==1?'One clue left.':'Work through these hints, then check again.')}${done?'<p><span class=stamp>CASE CLOSED</span></p>':''}<p><b>${done?`Exercise ${dn(cx)} is correct. ${esc(x.why)}`:`Hints (${h.length}):`}</b>${h.slice(0,8).map(t=>`<br>• ${esc(t)}`).join('')}${h.length>8?`<br>…and ${h.length-8} more.`:''}${done&&DRAW.indexOf(cx)<DRAW.length-1?`<br><button class=b data-x=${DRAW[DRAW.indexOf(cx)+1]}>Next: Exercise ${dn(cx)+1} →</button>`:''}${done&&exdone()==DRAW.length?'<br><b>All three EERDs complete.</b>':''}${!done&&B.chk>=3?'<br><span class=mu>The sample answer is now unlocked.</span>':''}</p></div>`}
+async function xp(){if(!B.N.length){say('The canvas is empty. Add components before exporting.');return}
+ try{const sv=$('#cv').cloneNode(true);sv.setAttribute('xmlns','http://www.w3.org/2000/svg');sv.setAttribute('width',2000);sv.setAttribute('height',1240);sv.removeAttribute('id');sv.setAttribute('viewBox','0 0 1000 620');sv.removeAttribute('style');const rr=sv.querySelectorAll('rect');if(rr[1])rr[1].remove();
+  const im=new Image();await new Promise((ok,no)=>{im.onload=ok;im.onerror=no;im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(sv))});
+  const cn=document.createElement('canvas');cn.width=2000;cn.height=1240;cn.getContext('2d').drawImage(im,0,0);
+  const bl=await new Promise(r=>cn.toBlob(r,'image/png')),dw=window.claude&&await window.claude.use('downloads'),fn='erd-exercise-'+dn(cx)+'.png';
+  if(dw){await dw.save({filename:fn,data:new Uint8Array(await bl.arrayBuffer())})}else{const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=fn;a.click()}
+  say('PNG ready to export.')}catch(er){say('Export failed'+(er&&er.code=='declined'?' (cancelled).':'. Please try again.'))}}
+/* Lecturer guide */
+P.G=()=>{$('#main').innerHTML=`<h2>Lecturer Guide <span class=lv>Level 3</span></h2>
+<div class=card><h3>What Level 3 is based on</h3><p>Level 3 follows the lecture slides <i>Topic 4 (Part 3): Entity-Relationship Model</i>, the <b>Enhanced ER model</b>: <b>weak entity</b> (double rectangle, partial key with a dashed underline, identified by partial key + foreign key), <b>composite entity</b> (a many-to-many relationship turned into an entity, drawn as a diamond inside a rectangle, with two 1:M relationships and a composite primary key), and <b>superclass / subclass</b> entities (generalisation, specialisation, and the constraints <b>d</b> disjoint, <b>o</b> overlap and <b>U</b> union). Level 3 content (entities, attributes, keys, relationships, 1:1 / 1:M / M:N) is assumed.</p></div>
+<div class=card><h3>Teaching video (compulsory)</h3><p>Module A, step 4 plays <b>Superclass_Subclass_EERM_EN_web.mp4</b>. Upload this file to the <b>same folder</b> as the HTML file (for GitHub Pages: the same folder as <i>erd-detective-level3.html</i>), with exactly this name. Until a student has watched the video to the end, forward seeking is blocked, speed is fixed at 1x, the video pauses if the tab is hidden, and Modules B to F are locked. Rewinding and replaying are always allowed. The completion is stored in the student’s browser, so it is a classroom aid and not tamper-proof. If the video does not load, students see a message naming the missing file.</p></div>
+<div class=card><h3>Suggested session (about 90 minutes)</h3><p>1) <b>Learn EER</b> (15 min): go through the eight steps with the class. Step 4 is a compulsory 7-minute video (superclass and subclass): students cannot skip ahead the first time, and Modules B to F stay locked until they have watched it to the end. 2) <b>Spot the Construct</b> (10 min). 3) <b>Identify the Key</b> (10 min). 4) <b>Superclass & Constraints</b> (15 min). 5) <b>Draw 3 EERDs</b> (30 min): students may export each diagram as PNG. 6) <b>Challenge Quiz</b> (10 min) as a formative assessment.</p></div>
+<div class=card><h3>Notation used in the drawing tool</h3><p><b>Strong entity</b>: single rectangle. <b>Weak entity</b>: double rectangle. <b>Composite entity</b>: diamond inside a rectangle; the app writes 1 next to each original entity and M next to the composite entity automatically. <b>Attributes</b>: oval; <i>Key</i> = solid underline, <i>Partial key</i> = dashed underline. <b>Subclass circle</b>: small circle with <b>d</b>, <b>o</b> or <b>U</b>. The superclass must be drawn above the circle and the subclasses below it; the ⊂ marks on the subclass lines are drawn automatically. Cardinality follows the Level 3 convention: only <b>1:1</b>, <b>1:M</b> (the “one” side first) and <b>M:N</b>.</p></div>
+<div class=card><h3>Marking logic</h3><p>B: 1 mark per scenario (choose the construct). C: 1 mark per question (2 per item). D: 1 mark for each correct superclass attribute (each wrong tick removes 1, never below 0) plus 1 for the constraint; the union item has 2 marks (constraint and subclass). E: an exercise counts when the EERD has exactly the stated entities, entity types, attributes, key / partial key flags, relationship or composite entity, and the correct circle constraint. Accepted spelling variants include “matric_number” and “email_address”. The sample answer unlocks after 3 unsuccessful checks and is recorded as “Sample answers viewed”. F: 1 mark per question (matching needs every pair correct). Levels: ≥90% EER Expert, 70–89% EER Explorer, <70% Keep Practising.</p></div>
+<div class=card><h3>Answer scheme used by the drawing tool</h3><div style="overflow-x:auto"><table><tr><th>Ex<th>Construct<th>Expected ERD</tr>
+<tr><td>1<td>Weak entity<td><b>COLLEGE</b> (strong): <u>college_code</u>, college_name, location — <b>HAS</b>, 1:M — <b>ROOM</b> (weak, double rectangle): <u style="text-decoration-style:dashed">room_no</u> (partial key), room_type, capacity</tr>
+<tr><td>2<td>Composite entity<td><b>STUDENT</b>: <u>matric_no</u>, student_name; <b>COURSE</b>: <u>course_code</u>, course_name, credit_hours; composite entity <b>REGISTRATION</b> joined directly to both, with <u>matric_no</u>, <u>course_code</u>, semester, grade (no separate diamond)</tr>
+<tr><td>3<td>Superclass and subclasses, overlap<td>Superclass <b>STAFF</b>: <u>staff_id</u>, staff_name, email, department; circle <b>o</b>; subclasses <b>LECTURER</b>: teaching_load and <b>RESEARCHER</b>: research_area, grant_amount</tr></table></div></div>
+<div class=card><h3>Student list (Google Sheet)</h3><p>Students register with name, matric number and section (on the same device they can reuse their Level 3 details with one tap). When every module (including all three EERDs) is complete, one row is sent to the <b>“Students L3”</b> tab of the same Google Sheet; Levels 1 and 2 keep their own tabs. Use the updated Code.gs, deploy it as a new version (Deploy > Manage deployments > New version, so the /exec URL stays the same), then paste the /exec URL into SHEET_URL at the top of the script. The Leaderboard reads the Level 3 tab.</p></div>
+<div class=card><h3>Privacy & offline use</h3><p>Progress and drawings are kept in the student’s browser local storage under Level 3 keys, so Level 1 and Level 3 progress is not affected. Name, matric number and section are sent only after all modules are complete; no other personal data is requested. The only extra item stored is the avatar the student picked, which appears on the Leaderboard.</p></div>`};
+const TH=['auto','dark','light'];let th=0;try{th=Math.max(0,TH.indexOf(localStorage.getItem('erdd3_theme')))}catch(e){}
+const applyTh=()=>{if(th)document.documentElement.dataset.theme=TH[th];else delete document.documentElement.dataset.theme;$('#thm').textContent='Theme: '+['Auto','Dark','Light'][th]};
+$('#thm').onclick=()=>{th=(th+1)%3;try{localStorage.setItem('erdd3_theme',TH[th])}catch(e){}applyTh()};applyTh();
+/* ---- animation helpers ---- */
+(()=>{const rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+(()=>{const W=1600,H=320;let s=11;const r=()=>(s=(s*16807)%2147483647)/2147483647;
+ const pal=['#19cde8','#8a5cff','#ff3bb5','#35e08a'];
+ // block: modern campus building with louvres and neon edge
+ const blk=(x,w,h,ac,ft=3)=>{const y=H-h;let o=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fff" stroke="${ac}" stroke-width="1.4" stroke-opacity=".8"/><rect x="${x}" y="${y}" width="${w}" height="5" fill="${ac}" fill-opacity=".75"/>`;
+  const fl=Math.max(1,Math.floor((h-14)/(h>110?26:22)));for(let f=0;f<fl;f++){const fy=y+14+f*((h-18)/fl);o+=`<rect x="${x+5}" y="${fy|0}" width="${w-10}" height="${((h-18)/fl-6)|0}" fill="${ac}" fill-opacity=".10" stroke="${ac}" stroke-opacity=".35" stroke-width=".8"/>`;
+   const n=Math.floor((w-10)/9);for(let k=0;k<n;k++){if(r()<.35)o+=`<rect class="wd" x="${x+7+k*9}" y="${(fy+3)|0}" width="5" height="${Math.max(3,((h-18)/fl-12)|0)}" fill="${ac}" opacity=".7"/>`}}
+  return o+`<path d="M${x} ${y} h${w}" stroke="${ac}" stroke-width="2"/>`};
+ const palm=(x,h,sc=1)=>`<g transform="translate(${x} ${H}) scale(${sc})"><path d="M0 0 Q4 ${-h*.5} 0 ${-h}" stroke="#7d6bb8" stroke-width="3" fill="none"/>${[-70,-35,0,35,70,110,-110].map(a=>`<path d="M0 ${-h} q${Math.sin(a*Math.PI/180)*22} ${-14-Math.abs(Math.cos(a*Math.PI/180))*10} ${Math.sin(a*Math.PI/180)*44} ${Math.abs(Math.sin(a*Math.PI/180))*18+6}" stroke="#35c88a" stroke-width="2.6" fill="none" stroke-linecap="round"/>`).join('')}</g>`;
+ let b='';
+ // distant hills
+ b+=`<path d="M0 ${H} V228 Q140 170 300 214 Q430 130 560 205 Q700 160 820 210 Q980 120 1130 200 Q1300 150 1450 205 Q1540 180 1600 215 V${H}Z" fill="#e4dcff" opacity=".8"/><path d="M0 ${H} V258 Q200 214 380 250 Q560 200 760 248 Q980 205 1180 250 Q1400 212 1600 252 V${H}Z" fill="#d3f1ee" opacity=".85"/>`;
+ // clouds
+ b+=`<g class="cl" fill="#fff" opacity=".85"><ellipse cx="260" cy="60" rx="60" ry="12"/><ellipse cx="300" cy="52" rx="38" ry="12"/><ellipse cx="1180" cy="84" rx="70" ry="12"/><ellipse cx="1224" cy="74" rx="40" ry="12"/></g>`;
+ // campus blocks left
+ b+=blk(30,86,98,'#19cde8')+blk(124,70,142,'#8a5cff')+blk(202,96,84,'#ff3bb5')+blk(306,64,118,'#35e08a');
+ // surau / dewan with dome (centre-left)
+ const cx=520;b+=`<rect x="${cx-70}" y="${H-80}" width="140" height="80" fill="#fff" stroke="#8a5cff" stroke-width="1.4" stroke-opacity=".85"/><path d="M${cx-38} ${H-80} Q${cx-38} ${H-138} ${cx} ${H-138} Q${cx+38} ${H-138} ${cx+38} ${H-80}Z" fill="#f3eeff" stroke="#8a5cff" stroke-width="1.6"/><path d="M${cx} ${H-138} V${H-158}" stroke="#ff3bb5" stroke-width="2"/><circle class="rl" cx="${cx}" cy="${H-160}" r="3" fill="#ff3bb5"/><path d="M${cx-22} ${H-80} V${H-104} Q${cx} ${H-120} ${cx+22} ${H-104} V${H-80}" fill="none" stroke="#19cde8" stroke-width="1.2" stroke-opacity=".8"/><path d="M${cx-60} ${H-60} h120 M${cx-60} ${H-44} h120 M${cx-60} ${H-28} h120" stroke="#8a5cff" stroke-opacity=".35"/><rect x="${cx-86}" y="${H-110}" width="10" height="110" fill="#fff" stroke="#19cde8" stroke-width="1.2"/><path d="M${cx-86} ${H-110} l5 -16 l5 16" fill="#fff" stroke="#19cde8" stroke-width="1.2"/><circle class="rl" cx="${cx-81}" cy="${H-128}" r="2.2" fill="#ff3bb5"/>`;
+ // tower with ring (library / admin) 
+ const tx=720;b+=`<rect x="${tx-18}" y="${H-190}" width="36" height="190" fill="#fff" stroke="#19cde8" stroke-width="1.4" stroke-opacity=".85"/><rect x="${tx-30}" y="${H-206}" width="60" height="22" rx="3" fill="#fff" stroke="#8a5cff" stroke-width="1.4"/><rect x="${tx-24}" y="${H-200}" width="48" height="10" fill="#19cde8" fill-opacity=".25"/><circle cx="${tx}" cy="${H-148}" r="11" fill="#fff" stroke="#ff3bb5" stroke-width="1.6"/><path d="M${tx} ${H-148} V${H-156} M${tx} ${H-148} L${tx+6} ${H-144}" stroke="#ff3bb5" stroke-width="1.6" stroke-linecap="round"/><path d="M${tx} ${H-206} V${H-228}" stroke="#8a5cff" stroke-width="2"/><circle class="rl" cx="${tx}" cy="${H-230}" r="3" fill="#ff3bb5"/>`+[0,1,2,3,4].map(i=>`<rect class="wd" x="${tx-12}" y="${H-122+i*20}" width="24" height="8" fill="#19cde8" opacity=".6"/>`).join('');
+ // main gate sign
+ b+=`<g><rect x="800" y="${H-70}" width="210" height="52" rx="3" fill="#fff" stroke="#ff3bb5" stroke-width="1.6"/><rect x="800" y="${H-70}" width="210" height="6" fill="#ff3bb5"/><text x="905" y="${H-44}" text-anchor="middle" font-family="Orbitron,sans-serif" font-weight="800" font-size="17" fill="#1a1640">UTHM</text><text x="905" y="${H-27}" text-anchor="middle" font-family="Share Tech Mono,monospace" font-size="11.5" fill="#8a5cff" letter-spacing="1.4">KAMPUS CAWANGAN PAGOH</text><path d="M814 ${H-18} v18 M996 ${H-18} v18" stroke="#8a5cff" stroke-width="3"/></g>`;
+ // blocks right
+ b+=blk(1050,90,128,'#35e08a')+blk(1148,74,92,'#19cde8')+blk(1230,100,150,'#8a5cff')+blk(1338,70,100,'#ff3bb5')+blk(1416,86,76,'#19cde8')+blk(1510,80,112,'#35e08a');
+ // walkway + palms
+ b+=palm(770,60,.9)+palm(1030,70,1)+palm(1212,50,.8)+palm(1495,64,.9)+palm(380,56,.85)+palm(10,66,1);
+ b+=`<rect y="${H-8}" width="${W}" height="8" fill="#fff" opacity=".9"/><path d="M0 ${H-8} H${W}" stroke="#19cde8" stroke-width="1.5" stroke-opacity=".8"/><path d="M0 ${H-4} H${W}" stroke="#ff3bb5" stroke-width="1" stroke-opacity=".6" stroke-dasharray="14 12"/>`;
+ // delivery drone
+ const dr=`<g class="drone"><g transform="translate(0 70)"><rect x="-12" y="-4" width="24" height="9" rx="4" fill="#fff" stroke="#8a5cff" stroke-width="1.5"/><path d="M-18 -8 h12 M6 -8 h12" stroke="#19cde8" stroke-width="2"/><path d="M-4 5 v7 h8 v-7" fill="#ff3bb5" fill-opacity=".3" stroke="#ff3bb5"/><circle class="rl" cx="0" cy="-1" r="1.8" fill="#ff3bb5"/></g></g>`;
+ document.body.insertAdjacentHTML('afterbegin',`<div class=campus aria-hidden=true><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMax slice">${b}${dr}</svg></div>`)})();
+const cv=document.createElement('canvas');cv.id='conf';cv.setAttribute('aria-hidden','true');document.body.appendChild(cv);
+const cx=cv.getContext('2d');let ps=[],raf=0;
+const CO=['#00e5ff','#ff2bd6','#ffd23f','#39ff88','#a56bff','#ff8a1f'];
+function tick(){cx.clearRect(0,0,cv.width,cv.height);ps.forEach(p=>{p.vy+=.12;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.globalAlpha=Math.max(0,1-p.y/cv.height*.7);p.s?cx.fillRect(-p.w/2,-p.h/2,p.w,p.h):(cx.beginPath(),cx.arc(0,0,p.w/2,0,7),cx.fill());cx.restore()});ps=ps.filter(p=>p.y<cv.height+20);if(ps.length)raf=requestAnimationFrame(tick);else{raf=0;cx.clearRect(0,0,cv.width,cv.height)}}
+window.confetti=(n=110)=>{if(rm)return;cv.width=innerWidth;cv.height=innerHeight;for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,sp=4+Math.random()*9;ps.push({x:cv.width/2+(Math.random()-.5)*160,y:cv.height*.35,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-6,w:6+Math.random()*7,h:4+Math.random()*5,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:CO[i%6],s:Math.random()<.65})}if(!raf)raf=requestAnimationFrame(tick)};
+/* fire confetti when a success element appears */
+let last=0;new MutationObserver(m=>{if(Date.now()-last<1500||cur=='home'||cur=='L')return;for(const r of m)for(const n of r.addedNodes){if(n.nodeType!=1)continue;const t=n.textContent||'';if(/CASE CLOSED|Strong result|EER Expert|EER Explorer/.test(t)||(n.id=='fb'&&n.querySelector('.fb.good'))){last=Date.now();confetti(/CASE CLOSED|Expert/.test(t)?150:70);return}}}).observe($('#main'),{childList:true,subtree:true});
+})();
+go('home');
+</script></body></html>
