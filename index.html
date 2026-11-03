@@ -508,7 +508,7 @@ P.A=(st=0,note='')=>{
    <tr><td>“…either A or B, not both”<td>Circle with <b>d</b> (disjoint)</tr>
    <tr><td>“…can be both A and B”<td>Circle with <b>o</b> (overlap)</tr>
    <tr><td>One entity can come from more than one superclass<td>Circle with <b>U</b> (union)</tr></table></div>
-   <p class=mu>Remember the cardinality rule from Level 3 still applies: only <b>1:1</b>, <b>1:M</b> and <b>M:N</b>, and the “one” side is written first.</p>`],
+   <p class=mu>Remember the cardinality rule from Level 1 and 2 still applies: only <b>1:1</b>, <b>1:M</b> and <b>M:N</b>, and the “one” side is written first.</p>`],
  ['You are ready','Now practise the new constructs.',`<p>Next you will <b>spot the construct</b> in short scenarios, <b>identify the keys</b>, decide <b>superclass attributes and constraints</b>, then <b>draw three EERDs</b>.</p><p class=mu>Tip: in the drawing tool, use <b>＋ Weak entity</b>, <b>＋ Composite entity</b> and <b>＋ Subclass circle</b>.</p>`]][st];
  $('#main').innerHTML=`<h2>Learn EER <span class=lv>Enhanced ER model</span></h2><div>${T&&[0,1,2,3,4,5,6,7].map(i=>`<span class="chip ${i==st?'on':''}">${i+1}</span>`).join('')}</div>${note?`<div class=card style="border-color:#e0a100"><b>🔒 ${note}</b></div>`:''}${say2(st==7?'joy':st==2||st==5?'think':'happy',DL[st],84)}<div class=card><h3>${T[0]}</h3><p><b>${T[1]}</b></p>${T[2]}</div>
  ${st?'<button class=b2 id=pv>← Back</button>':''}${st<7?`<button class=b id=nx${st==3&&!S.vid?' disabled':''}>Next →</button>`:'<button class=b id=ok>Finish ✓</button>'}`;
